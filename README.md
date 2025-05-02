@@ -1,5 +1,5 @@
 
-# ⚽ Soccer Lineup Maker (Organizador de Formaciones) ⚽
+# ⚽ Soccer Lineup Maker (Organizador de Formaciones)
 
 Una aplicación web para crear y compartir alineaciones de partidos de fútbol, con un campo interactivo y controles sencillos.  
 **Desplegada en:** [https://juancruzdal.github.io](https://juancruzdal.github.io)
