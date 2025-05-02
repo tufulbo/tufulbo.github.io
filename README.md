@@ -16,6 +16,7 @@ Una aplicación web para crear y compartir alineaciones de partidos de fútbol, 
   - Genera imágenes (720x1080 px, optimizadas para WhatsApp).
 - **Diseño responsivo:** Funciona en móviles, tabletas y escritorios.
 - **Favicon SVG:** Ícono de página definido en el HTML.
+![image](https://github.com/user-attachments/assets/955c46aa-2f35-4e57-b6b0-a1fd657a1b3b)
 
 ---
 
