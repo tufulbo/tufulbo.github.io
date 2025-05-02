@@ -357,8 +357,8 @@
             parent.style.alignItems = 'center';
             parent.style.justifyContent = 'center';
             parent.style.backgroundColor = '#006400';
-            parent.style.width = '512px';
-            parent.style.height = '1024px';
+            parent.style.width = '720px';
+            parent.style.height = '1080px';
           }
 
           // Hacer jugadores y nombres más grandes
@@ -412,7 +412,7 @@
       const team1List = parsedPlayers.slice(0, half).join('\n');
       const team2List = parsedPlayers.slice(half).join('\n');
     
-      const text = `EQUIPO OSCURO:\n${team1List}\n\nEQUIPO CLARO:\n${team2List}\n\nHora: ${matchHour.toString().padStart(2, '0')}:${matchMinutes}\nCosto: $${matchFee}`;
+      const text = `EQUIPO OSCURO:\n${team1List}\n\nEQUIPO CLARO:\n${team2List}\n\nHora: ${matchHour.toString().padStart(2, '0')}:${matchMinutes.toString().padStart(2, '0')}\nCosto: $${matchFee}`;
     
       navigator.clipboard.writeText(text)
       
