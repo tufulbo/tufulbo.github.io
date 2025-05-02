@@ -1,4 +1,6 @@
-Editor de Alineaciones de Fútbol ⚽
+# **Soccer Lineup Maker (Pickup Soccer organizer)** ⚽
+### **Creador de Formaciones, (Organizador de formaciones)** ⚽
+
 Una aplicación web para crear y compartir alineaciones de partidos de fútbol, con un campo interactivo y controles sencillos. Desplegada en https://juancruzdal.github.io.
 ✨ Características
 
