@@ -1,77 +1,111 @@
-# **Soccer Lineup Maker (Pickup Soccer organizer)** ⚽
-### **Creador de Formaciones, (Organizador de formaciones)** ⚽
 
-Una aplicación web para crear y compartir alineaciones de partidos de fútbol, con un campo interactivo y controles sencillos. 
-Desplegada en https://juancruzdal.github.io.
+# ⚽ Soccer Lineup Maker (Organizador de Formaciones) ⚽
 
-✨ Características
+Una aplicación web para crear y compartir alineaciones de partidos de fútbol, con un campo interactivo y controles sencillos.  
+**Desplegada en:** [https://juancruzdal.github.io](https://juancruzdal.github.io)
 
-Configura el partido: Ajusta hora, costo y formación (5v5, 6v6, 7v7).
-Organiza equipos: Ingresa nombres de jugadores y genera dos equipos automáticamente.
-Campo interactivo: Intercambia posiciones de jugadores con clics.
-Comparte fácilmente:
-Copia alineaciones como texto.
-Genera imágenes (720x1080 px, optimizadas para WhatsApp).
+---
 
+## ✨ Características
 
-Diseño responsivo: Funciona en móviles, tabletas y escritorios.
-Favicon SVG: Ícono de página definido en el HTML.
+- **Configura el partido:** Ajusta hora, costo y formación (5v5, 6v6, 7v7).
+- **Organiza equipos:** Ingresa nombres de jugadores y genera dos equipos automáticamente.
+- **Campo interactivo:** Intercambia posiciones de jugadores con clics.
+- **Comparte fácilmente:**
+  - Copia alineaciones como texto.
+  - Genera imágenes (720x1080 px, optimizadas para WhatsApp).
+- **Diseño responsivo:** Funciona en móviles, tabletas y escritorios.
+- **Favicon SVG:** Ícono de página definido en el HTML.
 
-🛠 Tecnologías
+---
 
-HTML: Estructura (index.html).
-CSS: Estilos responsivos (styles.css).
-JavaScript: Interactividad y generación de imágenes con html2canvas (script.js).
-GitHub Pages: Hospedaje.
+## 🛠 Tecnologías
 
-🚀 Cómo Usar
-En GitHub Pages
+- **HTML:** Estructura (`index.html`)
+- **CSS:** Estilos responsivos (`styles.css`)
+- **JavaScript:** Interactividad y generación de imágenes con [html2canvas](https://html2canvas.hertzen.com/) (`script.js`)
+- **GitHub Pages:** Hospedaje
 
-Visita https://juancruzdal.github.io.
-Los cambios en la rama main se reflejan en 1-10 minutos.
+---
 
-Localmente
+## 🚀 Cómo Usar
 
-Clona el repositorio:git clone https://github.com/juancruzdal/juancruzdal.github.io.git
+### En GitHub Pages
 
+1. Visita: [https://juancruzdal.github.io](https://juancruzdal.github.io)  
+2. Los cambios en la rama `main` se reflejan en 1 a 10 minutos.
 
-Abre index.html en un navegador o usa un servidor local:npx http-server
+### Localmente
 
-Accede a http://localhost:8080.
+```bash
+git clone https://github.com/juancruzdal/juancruzdal.github.io.git
+cd juancruzdal.github.io
+npx http-server
+```
 
-Instrucciones
+Accede a: [http://localhost:8080](http://localhost:8080)
 
-Ajusta hora, costo y formación.
-Ingresa nombres de jugadores (uno por línea) y haz clic en Generar Equipos.
-Intercambia jugadores en el campo con clics.
-Usa Compartir, Copiar Imagen o Copiar Texto para compartir.
+---
 
-📂 Estructura
+## 📋 Instrucciones
+
+1. Ajusta hora, costo y formación.
+2. Ingresa nombres de jugadores (uno por línea) y haz clic en **Generar Equipos**.
+3. Intercambia jugadores en el campo con clics.
+4. Usa los botones **Compartir**, **Copiar Imagen** o **Copiar Texto** para compartir.
+
+---
+
+## 📂 Estructura del Proyecto
+
+```
 juancruzdal.github.io/
 ├── index.html      # Página principal
 ├── styles.css      # Estilos
 ├── script.js       # Lógica JavaScript
 └── README.md       # Documentación
+```
 
-📝 Notas
+---
 
-WhatsApp: Las imágenes generadas (720x1080 px) están optimizadas para vistas previas.
-Compatibilidad: El favicon SVG funciona en navegadores modernos.
-Mejoras futuras:
-Guardar alineaciones localmente.
-Personalizar colores del campo.
+## 📝 Notas
 
+- **WhatsApp:** Las imágenes generadas (720x1080 px) están optimizadas para vistas previas.
+- **Compatibilidad:** El favicon SVG funciona en navegadores modernos.
 
+### 🚧 Mejoras futuras
 
-🤝 Contribuir
+- Guardar alineaciones localmente.
+- Personalizar colores del campo.
 
-Haz un fork del repositorio.
-Crea una rama: git checkout -b mi-funcionalidad.
-Commitea cambios: git commit -m "Nueva funcionalidad".
-Sube la rama: git push origin mi-funcionalidad.
-Crea un Pull Request.
+---
 
-📜 Licencia
-MIT License
-📬 Contacto
-Creado por juancruzdal. Abre un issue para sugerencias o problemas.
+## 🤝 Contribuir
+
+1. Haz un **fork** del repositorio.
+2. Crea una nueva rama:
+   ```bash
+   git checkout -b mi-funcionalidad
+   ```
+3. Realiza tus cambios y haz commit:
+   ```bash
+   git commit -m "Nueva funcionalidad"
+   ```
+4. Sube tu rama:
+   ```bash
+   git push origin mi-funcionalidad
+   ```
+5. Crea un **Pull Request**.
+
+---
+
+## 📜 Licencia
+
+Distribuido bajo la licencia **MIT**.
+
+---
+
+## 📬 Contacto
+
+Creado por [juancruzdal](https://github.com/juancruzdal).  
+¿Sugerencias o problemas? ¡[Abre un issue](https://github.com/juancruzdal/juancruzdal.github.io/issues)!
