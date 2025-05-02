@@ -346,8 +346,8 @@
           clonedField.style.aspectRatio = 'unset';
           clonedField.style.maxWidth = 'unset';
           clonedField.style.maxHeight = 'unset';
-          clonedField.style.width = '720px';
-          clonedField.style.height = '1080px';
+          clonedField.style.width = '512px';
+          clonedField.style.height = '1024px';
     
           const parent = clonedField.parentElement;
           if (parent) {
@@ -357,8 +357,8 @@
             parent.style.alignItems = 'center';
             parent.style.justifyContent = 'center';
             parent.style.backgroundColor = '#006400';
-            parent.style.width = '720px';
-            parent.style.height = '1080px';
+            parent.style.width = '512px';
+            parent.style.height = '1024px';
           }
 
           // Hacer jugadores y nombres más grandes
