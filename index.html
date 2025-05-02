@@ -4,438 +4,70 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>Formación Vertical</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      background-color: #f0f0f0;
-    }
-    textarea {
-      width: 300px;
-      height: 200px;
-      margin: 10px;
-    }
-    button {
-      padding: 10px 20px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      cursor: pointer;
-      margin: 5px;
-    }
-    button:hover {
-      background-color: #45a049;
-    }
-    canvas {
-      border: 2px solid black;
-      background-color: #006400;
-      max-width: 100%;
-    }
-    .control-group {
-      display: flex;
-      align-items: center;
-      margin: 5px 0;
-    }
-    .control-group label {
-      margin-right: 10px;
-    }
-    .control-group input {
-      width: 80px;
-      padding: 5px;
-      text-align: center;
-    }
-    .control-group button {
-      padding: 5px 10px;
-      margin: 0 5px;
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <textarea id="playerList" placeholder="Abonados maranga martes f7 23hs\n \nJuan ✅\nNacho ❌ Nico ✅\nJose ❌ Alan ✅\nGuffa ❌ Dani ✅...\n \no tambien...\n \nMarangoni f7 23hs\n \nBrai\nAlan\nNacho..."></textarea>
-  <button onclick="assignPlayers()">Generar Equipos</button>
-  <div class="control-group">
-    <label>Hora:</label>
-    <button onclick="updateHour(-1)">-</button>
-    <input type="number" id="matchHour" value="23" min="0" max="23">
-    <button onclick="updateHour(1)">+</button>
+  <div class="app-container">
+    <div class="left-column">
+      <div class="controls-container">
+        <div class="time-control">
+          <label class="time-label" for="matchHour">Hora:</label>
+          <div class="time-input-group">
+            <div class="time-inputs">
+              <button class="btn time-button" onclick="updateHour(1)">+</button>
+              <input type="number" id="matchHour" value="23" min="0" max="23" oninput="handleHourChange()">
+              <button class="btn time-button" onclick="updateHour(-1)">-</button>
+            </div>
+            <div class="time-inputs">
+              <button class="btn time-button" onclick="updateMinutes(15)">+</button>
+              <input type="number" id="matchMinutes" value="00" min="0" max="59" oninput="handleMinutesChange()">
+              <button class="btn time-button" onclick="updateMinutes(-15)">-</button>
+            </div>
+          </div>
+        </div>
+    
+        <div class="fee-control">
+          <label class="fee-label" for="matchFee">Monto:</label>
+          <div class="fee-input-group">
+            <button class="btn fee-button" onclick="updateFee(-100)">-</button>
+            <input type="number" id="matchFee" value="3500" min="0" step="100" oninput="updateFee()">
+            <button class="btn fee-button" onclick="updateFee(100)">+</button>
+          </div>
+        </div>
+    
+        <div class="formation-control">
+          <label class="formation-label">Formación:</label>
+          <div class="formation-buttons">
+            <button class="btn formation-button" onclick="setFormation(5)">5 vs 5</button>
+            <button class="btn formation-button" onclick="setFormation(6)">6 vs 6</button>
+            <button class="btn formation-button" onclick="setFormation(7)">7 vs 7</button>
+          </div>
+        </div>
+    
+        <div class="action-buttons">
+          <button class="btn action-button" onclick="shareField()">Compartir</button>
+          <button class="btn action-button" onclick="copyFieldAsImage()">Copiar Imagen</button>
+          <button class="btn action-button" onclick="copyFieldText()">Copiar Texto</button>
+        </div>
+      </div>
+    
+      <div class="player-input-container">
+        <label class="player-input-label" for="playerList">Ingresa los nombres uno por línea:</label>
+        <textarea class="player-input" id="playerList" placeholder="Ingresa los nombres uno por linea."></textarea>
+        <button class="btn generate-teams-button" onclick="assignPlayers()">Generar Equipos</button>
+      </div>
+    </div>
+
+    <div class="field-container">
+      <div class="field-line center-line"></div>
+      <div class="field-line center-circle"></div>
+      <div class="field-line goal-area top-goal"></div>
+      <div class="field-line goal-area bottom-goal"></div>
+      <div class="match-info" id="matchInfo">Hora: 23:00<br>Costo: $3500</div>
+    </div>
   </div>
-  <div class="control-group">
-    <label>Monto:</label>
-    <button onclick="updateFee(-100)">-</button>
-    <input type="number" id="matchFee" value="3500" min="1000" max="10000" step="100">
-    <button onclick="updateFee(100)">+</button>
-  </div>
-  <div class="control-group">
-  <label>Formación:</label>
-    <button onclick="setFormation(6)">6 vs 6</button>
-    <button onclick="setFormation(7)">7 vs 7</button>
-  </div>
-  <div class="control-group">
-    <button onclick="shareField()">Compartir al grupo</button>
-    <button onclick="copyFieldImage()">Copiar en imagen</button>
-    <button onclick="copyFieldText()">Copiar en Texto</button>
-  </div>
-  <canvas id="field" width="400" height="600"></canvas>
 
-  <script>
-    let team1Positions = [];
-    let team2Positions = [];
-    let parsedPlayers = [];
-    let currentFormation = 7; // Por defecto 7v7
-    let allPositionsInitialized = false;
-
-    let selectedPlayer = null;
-    let matchHour = 22;
-    let matchFee = 3500;
-    
-    var textAreas = document.getElementsByTagName('textarea');
-    Array.prototype.forEach.call(textAreas, function(elem) {
-        elem.placeholder = elem.placeholder.replace(/\\n/g, '\n');
-    });
-
-    function updateHour(change) {
-      matchHour = Math.max(0, Math.min(23, matchHour + change));
-      document.getElementById('matchHour').value = matchHour;
-      renderField();
-    }
-    
-    function setFormation(n) {
-      currentFormation = n;
-      allPositionsInitialized = false; // fuerza el redibujado de posiciones
-      renderField();
-    }
-
-
-    function updateFee(change) {
-      matchFee = Math.max(0, matchFee + change);
-      document.getElementById('matchFee').value = matchFee;
-      renderField();
-    }
-
-    // Ajustar tamaño del canvas para móviles
-    function getTeamPositions(teamSize, isTop) {
-      const canvas = document.getElementById('field');
-      const scaleX = canvas.width / 400;
-      const scaleY = canvas.height / 600;
-      const height = canvas.height;
-    
-      const yBase = isTop
-        ? [30, 120, 240, 360]
-        : [height - 30, height - 120, height - 240, height - 360];
-    
-      const allPositions = [
-        { x: 200 * scaleX, y: yBase[0] },
-        { x: 85 * scaleX, y: yBase[1] },
-        { x: 200 * scaleX, y: yBase[1] },
-        { x: 315 * scaleX, y: yBase[1] },
-        { x: 120 * scaleX, y: yBase[2] },
-        { x: 280 * scaleX, y: yBase[2] },
-        { x: 200 * scaleX, y: yBase[2] }
-      ];
-    
-      // En 6v6, quitamos el delantero central (índice 6)
-      if (teamSize === 6) {
-        return allPositions.filter((_, index) => index !== 6);
-      }
-    
-      return allPositions;
-    }
-
-
-
-    function assignPlayers() {
-      const rawInput = document.getElementById('playerList').value;
-      const lines = rawInput.split('\n');
-    
-      const players = [];
-      let skip = false;
-    
-      lines.forEach((line, index) => {
-        if (index === 0) return; // Omitir primera línea
-        const trimmed = line.trim();
-        if (!trimmed || skip) return;
-    
-        // Si aparece "reserva" o "suplentes", cortar ahí
-        if (/reserva|suplentes/i.test(trimmed)) {
-          skip = true;
-          return;
-        }
-    
-        const hasEmoji = /[✅❌]/.test(trimmed);
-    
-        if (trimmed.includes('❌')) {
-          const afterX = trimmed.split('❌').pop();
-          const cleaned = afterX.replace(/[✅❌]/g, '').trim();
-    
-          // Agrupar palabras de hasta 3 para nombres compuestos
-          const parts = cleaned.split(/(?<=\S)\s+(?=\S)/g).reduce((acc, word) => {
-            if (!acc.length || acc[acc.length - 1].split(' ').length >= 3) {
-              acc.push(word);
-            } else {
-              acc[acc.length - 1] += ' ' + word;
-            }
-            return acc;
-          }, []);
-    
-          players.push(...parts);
-        } else if (hasEmoji) {
-          const cleaned = trimmed.replace(/[✅❌]/g, '').trim();
-          if (cleaned) players.push(cleaned);
-        } else {
-          const spaceCount = (trimmed.match(/ /g) || []).length;
-          if (spaceCount <= 2) {
-            players.push(trimmed);
-          }
-        }
-      });
-
-      const half = Math.ceil(players.length / 2);
-      team1 = players.slice(0, half);
-      team2 = players.slice(half);
-    
-      selectedPlayer = null;
-      renderField();
-      parsedPlayers = [...players]; // guarda la lista procesada
-      document.getElementById('playerList').value = players.join('\n');
-    }
-
-    function shareField() {
-      const canvas = document.getElementById('field');
-      const dataURL = canvas.toDataURL('image/png');
-      const playersInput = document.getElementById('playerList').value;
-      const players = playersInput.split('\n').filter(name => name.trim() !== '');
-      const half = Math.ceil(players.length / 2);
-      const team1List = players.slice(0, half).join(', ');
-      const team2List = players.slice(half).join(', ');
-      const shareText = `Formación de equipos:\nEquipo 1: ${team1List}\nEquipo 2: ${team2List}\nHora: ${matchHour}:00\nCosto: $${matchFee}`;
-      
-      fetch(dataURL)
-        .then(res => res.blob())
-        .then(blob => {
-          const file = new File([blob], 'formacion_equipos.png', { type: 'image/png' });
-          const shareData = {
-            title: 'Formación Vertical',
-            text: shareText,
-            files: [file]
-          };
-
-          if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
-            navigator.share(shareData)
-              .catch(err => {
-                console.error('Error al compartir:', err);
-                alert('No se pudo compartir. Descarga la imagen manualmente haciendo clic derecho en el campo.');
-              });
-          } else {
-            alert('Compartir imágenes no soportado. Descarga la imagen manualmente haciendo clic derecho en el campo.\n\n' + shareText);
-          }
-        })
-        .catch(err => {
-          console.error('Error al convertir la imagen:', err);
-          alert('Error al preparar la imagen. Descarga la imagen manualmente haciendo clic derecho en el campo.');
-        });
-    }
-
-    function renderField() {
-      const canvas = document.getElementById('field');
-      const ctx = canvas.getContext('2d');
-      const scaleX = canvas.width / 400;
-      const scaleY = canvas.height / 600;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-      // Fondo
-      ctx.fillStyle = '#006400';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
-      // Bordes de la cancha
-      ctx.strokeStyle = 'white';
-      ctx.lineWidth = 2;
-      ctx.strokeRect(10 * scaleX, 10 * scaleY, canvas.width - 20 * scaleX, canvas.height - 20 * scaleY);
-    
-      // Línea media
-      ctx.beginPath();
-      ctx.moveTo(0, canvas.height / 2);
-      ctx.lineTo(canvas.width, canvas.height / 2);
-      ctx.stroke();
-    
-      // Círculo central
-      ctx.beginPath();
-      ctx.arc(canvas.width / 2, canvas.height / 2, 40 * scaleX, 0, Math.PI * 2);
-      ctx.stroke();
-    
-      // Arcos (áreas pequeñas)
-      function drawGoalArea(y) {
-        ctx.beginPath();
-        ctx.rect((canvas.width - 120 * scaleX) / 2, y, 120 * scaleX, 40 * scaleY);
-        ctx.stroke();
-      }
-    
-      drawGoalArea(10 * scaleY);
-      drawGoalArea(canvas.height - 50 * scaleY);
-    
-      // Hora y costo
-      const infoText = `Hora: ${matchHour}:00 - Costo: $${matchFee}`;
-      ctx.font = `${14 * scaleX}px Arial`;
-      const textMetrics = ctx.measureText(infoText);
-      const textWidth = textMetrics.width;
-      const textHeight = 14 * scaleX;
-      ctx.fillStyle = 'white';
-      ctx.fillRect(canvas.width / 2 - textWidth / 2 - 4 * scaleX, canvas.height / 2 - textHeight - 4 * scaleY, textWidth + 8 * scaleX, textHeight + 8 * scaleY);
-      ctx.fillStyle = 'black';
-      ctx.fillText(infoText, canvas.width / 2 - textWidth / 2, canvas.height / 2);
-    
-      // Obtener posiciones para cada equipo
-      if (!allPositionsInitialized) {
-        team1Positions = getTeamPositions(currentFormation, true);
-        team2Positions = getTeamPositions(currentFormation, false);
-      }
-    
-      // Dibujar jugadores equipo 1
-      team1Positions.forEach((pos, i) => {
-        const name = team1[i] || '';
-        drawPlayer(name, pos.x, pos.y, true, selectedPlayer?.team === 'team1' && selectedPlayer.index === i);
-      });
-      
-      team2Positions.forEach((pos, i) => {
-        const name = team2[i] || '';
-        drawPlayer(name, pos.x, pos.y, false, selectedPlayer?.team === 'team2' && selectedPlayer.index === i);
-      });
-
-    
-      // Soporte para intercambiar jugadores con clic
-      const allPositions = {
-        team1: team1Positions,
-        team2: team2Positions
-      };
-    
-      // Soporte para clic y toque en el canvas (móviles y escritorio)
-      canvas.addEventListener('click', handleCanvasInteraction);
-      canvas.addEventListener('touchstart', function (e) {
-        if (e.touches.length === 1) {
-          handleCanvasInteraction(e.touches[0]);
-          e.preventDefault();
-        }
-      }, { passive: false });
-    }
-    
-    function handleCanvasInteraction(event) {
-      const canvas = document.getElementById('field');
-      const rect = canvas.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
-      const scaleX = canvas.width / 400;
-    
-      function findPlayer(positions, teamName) {
-        for (let i = 0; i < positions.length; i++) {
-          const dx = x - positions[i].x;
-          const dy = y - positions[i].y;
-          if (Math.sqrt(dx * dx + dy * dy) < 15 * scaleX) {
-            return { team: teamName, index: i };
-          }
-        }
-        return null;
-      }
-    
-      const clicked =
-        findPlayer(team1Positions, 'team1') ||
-        findPlayer(team2Positions, 'team2');
-    
-      if (clicked) {
-        if (!selectedPlayer) {
-          selectedPlayer = clicked;
-        } else {
-          const i1 = selectedPlayer.index;
-          const i2 = clicked.index;
-    
-          if (selectedPlayer.team === clicked.team) {
-            if (clicked.team === 'team1') {
-              [team1[i1], team1[i2]] = [team1[i2], team1[i1]];
-            } else {
-              [team2[i1], team2[i2]] = [team2[i2], team2[i1]];
-            }
-          } else {
-            [team1[i1], team2[i2]] = [team2[i2], team1[i1]];
-          }
-    
-          // Actualizar textarea
-          parsedPlayers = [...team1, ...team2];
-          document.getElementById('playerList').value = parsedPlayers.join('\n');
-    
-          selectedPlayer = null;
-          renderField();
-        }
-      } else {
-        selectedPlayer = null;
-        renderField();
-      }
-    }
-
-    
-
-    function copyFieldImage() {
-      const canvas = document.getElementById('field');
-      const playersInput = document.getElementById('playerList').value;
-    
-      canvas.toBlob(async blob => {
-        const clipboardItems = [
-          new ClipboardItem({
-            'image/png': blob
-          })
-        ];
-        await navigator.clipboard.write(clipboardItems);
-      });
-    }
-    
-    
-    function copyFieldText() {
-      if (parsedPlayers.length === 0) {
-        alert("No hay jugadores generados aún.");
-        return;
-      }
-    
-      const half = Math.ceil(parsedPlayers.length / 2);
-      const darkTeam = parsedPlayers.slice(0, half);
-      const lightTeam = parsedPlayers.slice(half);
-    
-      const text = `EQUIPO OSCURO\n\n${darkTeam.join('\n')}\n\nEQUIPO CLARO\n\n${lightTeam.join('\n')}\n\nHora: ${matchHour}hs Pago: $${matchFee}`;
-    
-      navigator.clipboard.writeText(text)
-        .then(() => {
-          alert('Texto copiado al portapapeles ✅');
-        })
-        .catch(err => {
-          console.error('Error al copiar texto:', err);
-          alert('No se pudo copiar el texto.');
-        });
-    }
-
-    function drawPlayer(name, x, y, isTopTeam, isSelected) {
-      const canvas = document.getElementById('field');
-      const scaleX = canvas.width / 400;
-      const ctx = canvas.getContext('2d');
-      ctx.beginPath();
-      ctx.arc(x, y, 10 * scaleX, 0, Math.PI * 2);
-      ctx.fillStyle = isTopTeam ? 'black' : 'white';
-      ctx.fill();
-      if (isSelected) {
-        ctx.strokeStyle = 'white';
-        ctx.lineWidth = 2 * scaleX;
-        ctx.stroke();
-      }
-      ctx.font = `${12 * scaleX}px Arial`;
-      const textMetrics = ctx.measureText(name);
-      const textWidth = textMetrics.width;
-      const textHeight = 12 * scaleX;
-      ctx.fillStyle = 'white';
-      ctx.fillRect(x - 20 * scaleX, y - 15 * scaleX - textHeight, textWidth + 4 * scaleX, textHeight + 4 * scaleX);
-      ctx.fillStyle = 'black';
-      ctx.fillText(name, x - 20 * scaleX, y - 15 * scaleX);
-    }
-  window.onload = function () {
-    renderField();
-  };
-  </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'938d73150a9dadc5',t:'MTc0NjA4MzMyNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+  <script src="script.js"></script>
+  <!-- html2canvas se cargará dinámicamente cuando sea necesario -->
 </body>
 </html>
