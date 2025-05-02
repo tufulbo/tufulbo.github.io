@@ -10,18 +10,18 @@
   --primary-color: #2e7d32;       /* Verde principal */
   --primary-hover: #1b5e20;     /* Verde oscuro para hover */
   --secondary-color: #006400;    /* Verde del campo */
-  --background-light: #f4f7f6;  /* Fondo general claro */
-  --background-panel: #ffffff; /* Fondo del panel izquierdo */
-  --card-bg: #f9f9f9;           /* Fondo de secciones internas */
-  --text-color: #333333;        /* Texto principal */
-  --text-color-secondary: #555555;/* Texto secundario */
-  --border-color: #e0e0e0;       /* Borde estándar */
-  --border-color-light: #eeeeee;  /* Borde muy claro */
-  --input-bg: #ffffff;           /* Fondo de inputs */
+  --background-light: #1f1f1f;  /* Fondo general claro */
+  --background-panel: #373737; /* Fondo del panel izquierdo */
+  --card-bg: #f8f8f8;           /* Fondo de secciones internas */
+  --text-color: #ffffff;        /* Texto principal */
+  --text-color-secondary: #ffffff;/* Texto secundario */
+  --border-color: #222222;       /* Borde estándar */
+  --border-color-light: #232323;  /* Borde muy claro */
+  --input-bg: #323232;           /* Fondo de inputs */
   --input-focus-border: var(--primary-color);
   --highlight-color: #ff9800;    /* Para selección de jugador */
-  --button-secondary-bg: #6c757d; /* Botones secundarios (gris) */
-  --button-secondary-hover: #5a6268;
+  --button-secondary-bg: #00a987; /* Botones secundarios (gris) */
+  --button-secondary-hover: #00b132;
 
   /* Sombras */
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
@@ -54,22 +54,37 @@ body {
   width: 100%;
   height: 100%;
   background-color: var(--background-light);
+  justify-content: center; /* Centra horizontalmente el contenido hijo (app-container) */
+  align-items: center; /* Centra verticalmente el contenido hijo (app-container) */
 }
 
 /* ========================================= */
 /* ========= LEFT COLUMN (CONTROLS) ======== */
 /* ========================================= */
 .left-column {
-  width: 360px; /* Ancho fijo para el panel de controles */
+  width: 20%; /* Ancho fijo para el panel de controles */
   flex-shrink: 0; /* Evitar que se encoja */
   height: 100%; /* Ocupar toda la altura */
   padding: 25px;
   background-color: var(--background-panel);
   border-right: 1px solid var(--border-color);
-  overflow-y: auto; /* Scroll SÓLO para el contenido del panel si excede la altura */
+  overflow: none; /* Scroll SÓLO para el contenido del panel si excede la altura */
   display: flex;
   flex-direction: column;
   gap: 25px; /* Espacio entre grupos principales (controles y input) */
+}
+
+label[for="matchHour"], label[for="matchFee"] {
+  text-align: center;
+  font-weight: bold;
+  display: block;
+  width: 100%;
+}
+
+.formation-label {
+  text-align: center;
+  width: 100%;
+  font-weight: bold; /* opcional: para destacarlo */
 }
 
 .controls-container,
@@ -113,6 +128,7 @@ label {
 .time-inputs input[type="number"],
 .fee-input-group input[type="number"] {
   width: 55px;
+  color: white;
   padding: 8px;
   border: 1px solid var(--border-color);
   border-radius: 6px;
@@ -272,30 +288,31 @@ label {
 /* ========= RIGHT AREA (FIELD WRAPPER) ==== */
 /* ========================================= */
 .field-area { /* Este es el contenedor que ocupa el resto del ancho */
-  flex-grow: 1; /* Toma todo el espacio horizontal restante */
+  flex-grow: 1; /* Toma todo el espacio horizontal restante del .app-container (que es flex) */
   height: 100%; /* Ocupa toda la altura */
-  display: flex; /* Para centrar el field-container */
-  justify-content: center;
-  align-items: center;
+  display: flex; /* *** CLAVE: Habilita Flexbox para este contenedor *** */
+  justify-content: center; /* *** CLAVE: Centra su hijo (.field-container) horizontalmente *** */
+  align-items: center; /* *** CLAVE: Centra su hijo (.field-container) verticalmente *** */
   background-color: var(--background-light); /* Fondo alrededor del campo */
-  padding: 30px; /* Espacio generoso alrededor del campo */
-  overflow: hidden; /* Evita que el campo centrado cause scroll */
+  padding: 30px; /* Espacio (margen) alrededor del campo */
+  overflow: hidden; /* Evita que el campo centrado cause scroll si hay errores de tamaño */
 }
 
 /* ========================================= */
 /* ========= FIELD CONTAINER (THE PITCH) === */
 /* ========================================= */
 .field-container {
-  position: relative; /* Crucial para posicionar elementos internos */
-  width: 100%; /* Usa el ancho disponible dentro de field-area (con padding) */
-  height: 100%; /* Usa la altura disponible */
-  max-width: 750px; /* Limita el ancho máximo del campo */
-  /* max-height calculado por aspect-ratio */
-  aspect-ratio: 2 / 3; /* Proporción fija (ancho/alto) - AJUSTA ESTO A TU GUSTO */
+  position: relative; /* Para elementos internos */
+  width: 100%; /* Ocupa el ancho disponible dentro del padding de field-area */
+  height: 100%; /* Ocupa toda la altura */
+  /* La altura se define por aspect-ratio */
+  max-width: 750px; /* Límite de ancho para que no sea gigantesco en pantallas anchas */
+  aspect-ratio: 2 / 3; /* Proporción fija (ancho/alto) */
   background-color: var(--secondary-color); /* Verde campo */
-  border-radius: 10px; /* Bordes redondeados */
-  box-shadow: var(--shadow-inset), var(--shadow-md); /* Sombra interior y exterior */
-  overflow: hidden; /* Esconder cualquier cosa que salga del borde */
+  border-radius: 10px;
+  box-shadow: var(--shadow-inset), var(--shadow-md);
+  overflow: hidden;
+  /* NOTA: No necesita margin: auto aquí porque el padre (.field-area) lo está centrando con flexbox */
 }
 
 /* --- Elementos DENTRO del campo --- */
@@ -353,7 +370,7 @@ label {
   font-size: clamp(12px, 1.5vw, 16px); /* Tamaño de fuente adaptable */
   text-align: center;
   box-shadow: var(--shadow-md);
-  color: var(--text-color);
+  color: black;
   white-space: nowrap; /* Evitar que se rompa en dos líneas fácilmente */
 }
 
@@ -418,45 +435,85 @@ label {
   .field-container {
     max-width: 600px; /* Reducir tamaño máximo del campo */
   }
+  .time-input-group {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 2px;
+  }
 }
 
 /* Dispositivos móviles (layout vertical) */
 @media (max-width: 768px) {
   body {
-    height: auto; /* Permitir scroll en móvil si el contenido es muy largo */
+    /* Keep existing - overflow: visible is crucial for page scroll */
+    height: auto;
     min-height: 100vh;
-    overflow: visible; /* Permitir scroll */
+    overflow: visible; /* <-- Ensures the body can scroll if content overflows */
   }
   .app-container {
-    flex-direction: column; /* Apilar elementos verticalmente */
-    height: auto; /* Altura basada en contenido */
+    flex-direction: column; /* Stack elements vertically */
+    /* Container grows based on content, minimum 100vh */
+    height: auto; /* <-- Allow height to be dictated by content */
+    min-height: 100vh; /* <-- Ensures it takes at least the viewport height initially, but can grow */
+    /* Remove overflow: hidden if it was present, as we want body to scroll */
   }
   .left-column {
-    width: 100%; /* Ocupar todo el ancho */
-    height: auto; /* Altura basada en contenido */
-    max-height: 60vh; /* Limitar altura máxima y permitir scroll interno */
-    border-right: none; /* Quitar borde derecho */
-    border-bottom: 1px solid var(--border-color); /* Añadir borde inferior */
-    padding: 15px;
-    gap: 15px;
+    width: 100%; /* Occupy full width */
+    /* Height determined solely by content */
+    height: auto; /* <-- Allow height to fit content */
+    /* Ensure it does NOT shrink below its content size,
+       GUARANTEEING its content fits */
+    flex-shrink: 0; /* <--- Explicitly prevent shrinking */
+    /* Ensure content does not cause internal scroll */
+    overflow-y: visible; /* <--- No internal scroll in left-column */
+
+    border-right: none; /* Remove right border */
+    border-bottom: 1px solid var(--border-color); /* Add bottom border */
+    padding: 15px; /* Keep padding */
+    gap: 15px; /* Keep gap */
+    /* box-sizing: border-box; /* Good practice, but less critical when height is auto/flex-shrink */
   }
   .field-area {
-    padding: 15px;
-    height: auto; /* Altura basada en contenido */
-    flex-grow: 1; /* Ocupar espacio vertical restante si es posible */
-    min-height: 50vh; /* Altura mínima para el área del campo */
+    padding: 15px; /* Keep padding */
+    /* Take all remaining vertical space */
+    flex-grow: 1; /* <--- Field area expands to fill available space */
+    /* Ensure it can shrink if left-column is very tall, allowing page scroll */
+    flex-shrink: 1; /* <-- Allow shrinking if needed */
+    /* Allow it to shrink below content size if necessary */
+    min-height: 0; /* <-- Important for flex items to shrink properly */
+    /* Remove potentially conflicting min-height if it was intended to force a minimum *viewport* height */
+    /* min-height: 50vh; */ /* Removed */
+    /* Ensure content does not cause internal scroll */
+    overflow-y: visible; /* <--- No internal scroll in field-area */
+    /* box-sizing: border-box; /* Good practice, but less critical when flex-grow */
   }
   .field-container {
-    /* Ajustar proporciones si se prefiere más ancho en vertical */
-    aspect-ratio: 3 / 4; /* Más ancho que alto */
-    max-width: 100%; /* Puede ocupar todo el ancho del padding */
-    max-height: 70vh; /* Limitar altura máxima */
+    /* Keep as is. Handles the size of the actual "field" element inside the area. */
+    /* The field-area will expand to contain this, or the page will scroll. */
+    aspect-ratio: 3 / 4;
+    max-width: 100%;
+    max-height: 70vh; /* This caps the field element's height, not the field-area */
+    /* If the field-container's content exceeds this max-height, and field-area has overflow: visible,
+       the content of field-container might be cut off or spill out unless field-container or its children handle overflow.
+       This is separate from field-area vs left-column layout. */
+
+    /* If you want the field-container centered within the potentially larger field-area: */
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
   }
    .player-btn {
     min-width: 65px;
     height: 28px;
     border-radius: 14px;
     font-size: 10px;
+  }
+  .time-input-group {
+    display: flex;
+    justify-content: center; /* ⬅ los junta al centro */
+    align-items: center;
+    gap: 10px; /* o menos en móviles */
   }
   .match-info {
      font-size: 11px;
@@ -468,7 +525,6 @@ label {
 @media (max-width: 480px) {
   .left-column {
     padding: 10px;
-    max-height: 55vh; /* Aún menos altura para el panel */
   }
   .controls-container, .player-input-container { gap: 15px; }
   .control-card { padding: 12px; }
@@ -479,13 +535,20 @@ label {
   .player-input { min-height: 100px; padding: 10px; }
   .generate-teams-button { padding: 10px; font-size: 0.9em; }
 
+  .time-input-group {
+    display: flex;
+    justify-content: center; /* ⬅ los junta al centro */
+    align-items: center;
+    gap: 10px; /* o menos en móviles */
+  }
+
   .field-area {
     padding: 10px;
     min-height: 45vh;
   }
    .field-container {
-     aspect-ratio: 4 / 5; /* Casi cuadrado */
-   }
+     aspect-ratio: 4 / 5;
+  }
   .player-btn {
     min-width: 60px;
     height: 26px;
@@ -497,4 +560,5 @@ label {
      font-size: 10px;
      padding: 6px 12px;
    }
+  
 }

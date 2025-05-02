@@ -301,7 +301,7 @@
       const half = Math.ceil(players.length / 2);
       const team1List = players.slice(0, half).join('\n');
       const team2List = players.slice(half).join('\n');
-      const shareText = `Formación de equipos:\n\nEQUIPO 1:\n${team1List}\n\nEQUIPO 2:\n${team2List}\n\nHora: ${matchHour.toString().padStart(2, '0')}:${matchMinutes}\nCosto: $${matchFee}`;
+      const shareText = `Formación de equipos:\n\nEQUIPO CLARO:\n${team1List}\n\nEQUIPO OSCURO:\n${team2List}\n\nHora: ${matchHour.toString().padStart(2, '0')}:${matchMinutes}\nCosto: $${matchFee}`;
       
       if (navigator.share) {
         navigator.share({
@@ -321,65 +321,74 @@
     }
 
     function copyFieldAsImage() {
-      // Usar html2canvas para capturar el campo como imagen
       if (typeof html2canvas === 'undefined') {
-        // Cargar html2canvas dinámicamente si no está disponible
         const script = document.createElement('script');
         script.src = 'https://html2canvas.hertzen.com/dist/html2canvas.min.js';
-        script.onload = function() {
-          captureFieldAsImage();
-        };
-        script.onerror = function() {
-          console.error('No se pudo cargar la herramienta para copiar imagen. Usa Copiar Texto en su lugar.');
-        };
+        script.onload = () => captureFieldAsImage();
+        script.onerror = () => alert('No se pudo cargar html2canvas');
         document.head.appendChild(script);
       } else {
         captureFieldAsImage();
       }
     }
-
+    
     function captureFieldAsImage() {
       const field = document.querySelector('.field-container');
-      const originalWidth = field.offsetWidth;
-      const originalHeight = field.offsetHeight;
-      
-      // Calcular escala para 720x1080
-      const targetWidth = 720;
-      const targetHeight = 1080;
-      const scale = Math.min(targetWidth/originalWidth, targetHeight/originalHeight);
-      
+    
       html2canvas(field, {
         backgroundColor: '#006400',
         logging: false,
         useCORS: true,
         allowTaint: true,
-        scale: scale,
-        width: targetWidth,
-        height: targetHeight,
-        windowWidth: targetWidth,
-        windowHeight: targetHeight,
+        scale: 3, // resolución más alta para mejor calidad
         onclone: (clonedDoc) => {
-          // Asegurar estilos en el clon
           const clonedField = clonedDoc.querySelector('.field-container');
-          clonedField.style.width = `${targetWidth}px`;
-          clonedField.style.height = `${targetHeight}px`;
+          clonedField.style.aspectRatio = 'unset';
+          clonedField.style.maxWidth = 'unset';
+          clonedField.style.maxHeight = 'unset';
+          clonedField.style.width = '512px';
+          clonedField.style.height = '1024px';
+    
+          const parent = clonedField.parentElement;
+          if (parent) {
+            parent.style.padding = '0';
+            parent.style.margin = '0';
+            parent.style.display = 'flex';
+            parent.style.alignItems = 'center';
+            parent.style.justifyContent = 'center';
+            parent.style.backgroundColor = '#006400';
+            parent.style.width = '512px';
+            parent.style.height = '1024px';
+          }
+
+          // Hacer jugadores y nombres más grandes
+          const players = clonedField.querySelectorAll('.player-btn');
+          players.forEach(player => {
+            player.style.transform = 'translate(-50%, -50%) scale(1.1)';
+            player.style.fontSize = '17px';
+            player.style.minWidth = '90px';
+            player.style.height = '42px';
+          });
         }
       }).then(canvas => {
-        // Asegurar tamaño exacto
         const finalCanvas = document.createElement('canvas');
-        finalCanvas.width = targetWidth;
-        finalCanvas.height = targetHeight;
+        finalCanvas.width = 720;
+        finalCanvas.height = 1080;
         const ctx = finalCanvas.getContext('2d');
-        ctx.drawImage(canvas, 0, 0, targetWidth, targetHeight);
-        
+    
+        // Rellenar fondo para asegurarse de que no haya bordes
+        ctx.fillStyle = '#006400';
+        ctx.fillRect(0, 0, 720, 1080);
+    
+        ctx.drawImage(canvas, 0, 0, 720, 1080);
+    
         finalCanvas.toBlob(blob => {
           navigator.clipboard.write([
             new ClipboardItem({ 'image/png': blob })
           ]).then(() => {
-            console.error('Imagen copiada (720x1080)');
+            console.log('Imagen copiada (720x1080)');
           }).catch(err => {
             console.error('Error al copiar:', err);
-            // Alternativa de descarga
             const link = document.createElement('a');
             link.download = 'formacion-equipos-720x1080.png';
             link.href = finalCanvas.toDataURL();
@@ -391,6 +400,7 @@
         alert('Error al generar imagen');
       });
     }
+    
 
     function copyFieldText() {
       if (parsedPlayers.length === 0) {

@@ -11,23 +11,23 @@
     <div class="left-column">
       <div class="controls-container">
         <div class="time-control">
-          <label class="time-label" for="matchHour">Hora:</label>
+          <label class="time-label" for="matchHour">HORARIO</label>
           <div class="time-input-group">
             <div class="time-inputs">
-              <button class="btn time-button" onclick="updateHour(1)">+</button>
-              <input type="number" id="matchHour" value="23" min="0" max="23" oninput="handleHourChange()">
               <button class="btn time-button" onclick="updateHour(-1)">-</button>
+              <input type="number" id="matchHour" value="23" min="0" max="23" oninput="handleHourChange()">
+              <button class="btn time-button" onclick="updateHour(1)">+</button>
             </div>
             <div class="time-inputs">
-              <button class="btn time-button" onclick="updateMinutes(15)">+</button>
-              <input type="number" id="matchMinutes" value="00" min="0" max="59" oninput="handleMinutesChange()">
               <button class="btn time-button" onclick="updateMinutes(-15)">-</button>
+              <input type="number" id="matchMinutes" value="00" min="0" max="59" oninput="handleMinutesChange()">
+              <button class="btn time-button" onclick="updateMinutes(15)">+</button>
             </div>
           </div>
         </div>
     
         <div class="fee-control">
-          <label class="fee-label" for="matchFee">Monto:</label>
+          <label class="fee-label" for="matchFee">PRECIO</label>
           <div class="fee-input-group">
             <button class="btn fee-button" onclick="updateFee(-100)">-</button>
             <input type="number" id="matchFee" value="3500" min="0" step="100" oninput="updateFee()">
@@ -36,7 +36,7 @@
         </div>
     
         <div class="formation-control">
-          <label class="formation-label">Formación:</label>
+          <label class="formation-label">FORMACIONES</label>
           <div class="formation-buttons">
             <button class="btn formation-button" onclick="setFormation(5)">5 vs 5</button>
             <button class="btn formation-button" onclick="setFormation(6)">6 vs 6</button>
@@ -52,7 +52,6 @@
       </div>
     
       <div class="player-input-container">
-        <label class="player-input-label" for="playerList">Ingresa los nombres uno por línea:</label>
         <textarea class="player-input" id="playerList" placeholder="Ingresa los nombres uno por linea."></textarea>
         <button class="btn generate-teams-button" onclick="assignPlayers()">Generar Equipos</button>
       </div>
