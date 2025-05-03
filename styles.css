@@ -307,7 +307,8 @@ label {
   width: 100%; /* Ocupa el ancho disponible dentro del padding de field-area */
   height: 100%; /* Ocupa toda la altura */
   /* La altura se define por aspect-ratio */
-  max-width: 750px; /* Límite de ancho para que no sea gigantesco en pantallas anchas */
+  max-width: 550px; /* Límite de ancho para que no sea gigantesco en pantallas anchas */
+  max-height: 800px;
   aspect-ratio: 2 / 3; /* Proporción fija (ancho/alto) */
   background-color: var(--secondary-color); /* Verde campo */
   border-radius: 10px;
@@ -368,7 +369,8 @@ label {
   background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco semi-transparente */
   padding: 10px 20px;
   border-radius: 8px;
-  font-size: clamp(12px, 1.5vw, 16px); /* Tamaño de fuente adaptable */
+  font-size: clamp(15px, 1.5vw, 17px); /* Tamaño de fuente adaptable */
+  font-weight: bold;
   text-align: center;
   box-shadow: var(--shadow-md);
   color: black;
@@ -380,7 +382,8 @@ label {
   position: absolute; /* Posicionado relativo a field-container */
   min-width: 75px;
   max-width: 100px; /* Limitar ancho máximo */
-  height: 32px; /* Ligeramente más pequeño */
+  height: 40px; /* Ligeramente más pequeño */
+  width: auto; /* Permitir que el ancho se ajuste al contenido */
   border-radius: 16px; /* Mitad de la altura */
   border: 2px solid white;
   display: flex;
@@ -390,7 +393,7 @@ label {
   cursor: pointer;
   transform: translate(-50%, -50%); /* Centrado perfecto */
   padding: 0 12px;
-  font-size: 11px; /* Más pequeño para caber nombres */
+  font-size: 14px; /* Más pequeño para caber nombres */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -434,7 +437,8 @@ label {
     padding: 20px; /* Reducir padding alrededor del campo */
   }
   .field-container {
-    max-width: 600px; /* Reducir tamaño máximo del campo */
+    max-width: 500px; /* Reducir tamaño máximo del campo */
+    max-height: 800px; /* Reducir tamaño máximo del campo */
   }
   .time-input-group {
     display: flex;
@@ -442,6 +446,36 @@ label {
     align-items: center;
     gap: 2px;
   }
+  
+  .field-area { /* Este es el contenedor que ocupa el resto del ancho */
+    flex-grow: 1; /* Toma todo el espacio horizontal restante del .app-container (que es flex) */
+    height: 100%; /* Ocupa toda la altura */
+    display: flex; /* *** CLAVE: Habilita Flexbox para este contenedor *** */
+    justify-content: center; /* *** CLAVE: Centra su hijo (.field-container) horizontalmente *** */
+    align-items: center; /* *** CLAVE: Centra su hijo (.field-container) verticalmente *** */
+    background-color: var(--background-light); /* Fondo alrededor del campo */
+    padding: 30px; /* Espacio (margen) alrededor del campo */
+    overflow: hidden; /* Evita que el campo centrado cause scroll si hay errores de tamaño */
+  }
+
+  /* ========================================= */
+  /* ========= FIELD CONTAINER (THE PITCH) === */
+  /* ========================================= */
+  .field-container {
+    position: relative; /* Para elementos internos */
+    width: 100%; /* Ocupa el ancho disponible dentro del padding de field-area */
+    height: 100%; /* Ocupa toda la altura */
+    /* La altura se define por aspect-ratio */
+    max-width: 550px; /* Límite de ancho para que no sea gigantesco en pantallas anchas */
+    max-height: 800px; /*
+    aspect-ratio: 2 / 4; /* Proporción fija (ancho/alto) */
+    background-color: var(--secondary-color); /* Verde campo */
+    border-radius: 10px;
+    box-shadow: var(--shadow-inset), var(--shadow-md);
+    overflow: hidden;
+    /* NOTA: No necesita margin: auto aquí porque el padre (.field-area) lo está centrando con flexbox */
+  }
+  
 }
 
 /* Dispositivos móviles (layout vertical) */
@@ -475,40 +509,12 @@ label {
     gap: 15px; /* Keep gap */
     /* box-sizing: border-box; /* Good practice, but less critical when height is auto/flex-shrink */
   }
-  .field-area {
-    padding: 15px; /* Keep padding */
-    /* Take all remaining vertical space */
-    flex-grow: 1; /* <--- Field area expands to fill available space */
-    /* Ensure it can shrink if left-column is very tall, allowing page scroll */
-    flex-shrink: 1; /* <-- Allow shrinking if needed */
-    /* Allow it to shrink below content size if necessary */
-    min-height: 0; /* <-- Important for flex items to shrink properly */
-    /* Remove potentially conflicting min-height if it was intended to force a minimum *viewport* height */
-    /* min-height: 50vh; */ /* Removed */
-    /* Ensure content does not cause internal scroll */
-    overflow-y: visible; /* <--- No internal scroll in field-area */
-    /* box-sizing: border-box; /* Good practice, but less critical when flex-grow */
-  }
-  .field-container {
-    /* Keep as is. Handles the size of the actual "field" element inside the area. */
-    /* The field-area will expand to contain this, or the page will scroll. */
-    aspect-ratio: 3 / 4;
-    max-width: 100%;
-    max-height: 70vh; /* This caps the field element's height, not the field-area */
-    /* If the field-container's content exceeds this max-height, and field-area has overflow: visible,
-       the content of field-container might be cut off or spill out unless field-container or its children handle overflow.
-       This is separate from field-area vs left-column layout. */
 
-    /* If you want the field-container centered within the potentially larger field-area: */
-    /* display: flex;
-    justify-content: center;
-    align-items: center; */
-  }
    .player-btn {
-    min-width: 65px;
-    height: 28px;
+    min-width: 70px;
+    height: 40px;
     border-radius: 14px;
-    font-size: 10px;
+    font-size: 14px;
   }
   .time-input-group {
     display: flex;
@@ -517,7 +523,8 @@ label {
     gap: 10px; /* o menos en móviles */
   }
   .match-info {
-     font-size: 11px;
+     font-size: clamp(15px, 1.5vw, 17px); /* Tamaño de fuente adaptable */
+     font-weight: bold;
      padding: 8px 15px;
   }
 }
@@ -545,21 +552,18 @@ label {
 
   .field-area {
     padding: 10px;
-    min-height: 45vh;
-  }
-   .field-container {
-     aspect-ratio: 4 / 5;
   }
   .player-btn {
-    min-width: 60px;
-    height: 26px;
+    min-width: 70px;
+    height: 40px;
     border-radius: 13px;
-    font-size: 9px;
+    font-size: 14px;
     padding: 0 8px;
   }
    .match-info {
-     font-size: 10px;
-     padding: 6px 12px;
+     font-size: clamp(15px, 1.5vw, 17px); /* Tamaño de fuente adaptable */
+     font-weight: bold;
+     padding: 2px 7px;
    }
   
 }

@@ -207,8 +207,8 @@
         [50, isTopTeam ? 20 : 80],
         [80, isTopTeam ? 20 : 80],
         // Medios
-        [30, isTopTeam ? 40 : 60],
-        [70, isTopTeam ? 40 : 60],
+        [15, isTopTeam ? 35 : 65],
+        [85, isTopTeam ? 35 : 65],
         // Medio centro
         [50, isTopTeam ? 40 : 60]
       ];
@@ -296,26 +296,54 @@
     }
 
     function shareField() {
-      const playersInput = document.getElementById('playerList').value;
-      const players = playersInput.split('\n').filter(name => name.trim() !== '');
-      const half = Math.ceil(players.length / 2);
-      const team1List = players.slice(0, half).join('\n');
-      const team2List = players.slice(half).join('\n');
-      const shareText = `Formación de equipos:\n\nEQUIPO CLARO:\n${team1List}\n\nEQUIPO OSCURO:\n${team2List}\n\nHora: ${matchHour.toString().padStart(2, '0')}:${matchMinutes}\nCosto: $${matchFee}`;
-      
-      if (navigator.share) {
-        navigator.share({
-          title: 'Formación de Equipos',
-          text: shareText
-        }).catch(err => {
-          console.error('Error al compartir:', err);
-          fallbackShare(shareText);
-        });
+      const field = document.getElementById('field-container');
+
+      if (!field) {
+        alert('No se encontró el campo para compartir.');
+        return;
+      }
+
+      if (typeof html2canvas === 'undefined') {
+        const script = document.createElement('script');
+        script.src = 'https://html2canvas.hertzen.com/dist/html2canvas.min.js';
+        script.onload = () => captureAndShareFieldImage();
+        script.onerror = () => alert('No se pudo cargar html2canvas');
+        document.head.appendChild(script);
       } else {
-        fallbackShare(shareText);
+        captureAndShareFieldImage();
       }
     }
 
+    function captureAndShareFieldImage() {
+      const field = document.getElementById('field-container');
+
+      html2canvas(field).then(canvas => {
+        canvas.toBlob(blob => {
+          if (blob) {
+            const file = new File([blob], 'formacion-equipos.png', { type: 'image/png' });
+
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+              navigator.share({
+                files: [file],
+                title: 'Formación de Equipos',
+                text: `Hora: ${matchHour.toString().padStart(2, '0')}:${matchMinutes.toString().padStart(2, '0')}\nCosto: $${matchFee}`
+              }).catch(err => {
+                console.error('Error al compartir:', err);
+                alert('No se pudo compartir la imagen.');
+              });
+            } else {
+              alert('La funcionalidad de compartir no está disponible en este dispositivo.');
+            }
+          } else {
+            console.error('Error al generar blob');
+            alert('Error al generar imagen');
+          }
+        }, 'image/png');
+      }).catch(err => {
+        console.error('Error:', err);
+        alert('Error al generar imagen');
+      });
+    }
     function fallbackShare(text) {
       alert(text);
     }
@@ -333,74 +361,37 @@
     }
     
     function captureFieldAsImage() {
-      const field = document.querySelector('.field-container');
+      const field = document.getElementById('field-container');
+      
+      if (!field) {
+          alert('No se encontró el campo para capturar.');
+          return;
+      }
     
-      html2canvas(field, {
-        backgroundColor: '#006400',
-        logging: false,
-        useCORS: true,
-        allowTaint: true,
-        scale: 3, // resolución más alta para mejor calidad
-        onclone: (clonedDoc) => {
-          const clonedField = clonedDoc.querySelector('.field-container');
-          clonedField.style.aspectRatio = 'unset';
-          clonedField.style.maxWidth = 'unset';
-          clonedField.style.maxHeight = 'unset';
-          clonedField.style.width = '720px';
-          clonedField.style.height = '1080px';
-    
-          const parent = clonedField.parentElement;
-          if (parent) {
-            parent.style.padding = '0';
-            parent.style.margin = '0';
-            parent.style.display = 'flex';
-            parent.style.alignItems = 'center';
-            parent.style.justifyContent = 'center';
-            parent.style.backgroundColor = '#006400';
-            parent.style.width = '720px';
-            parent.style.height = '1080px';
+      html2canvas(field).then(canvas => {
+        canvas.toBlob(blob => {
+          if (blob) {
+            navigator.clipboard.write([
+              new ClipboardItem({ 'image/png': blob })
+            ]).then(() => {
+              console.log('Imagen copiada (resolución adaptada a la pantalla)');
+            }).catch(err => {
+              console.error('Error al copiar:', err);
+              const link = document.createElement('a');
+              link.download = 'formacion-equipos-adaptada.png';
+              link.href = canvas.toDataURL();
+              link.click();
+            });
+          } else {
+            console.error('Error al generar blob');
+            alert('Error al generar imagen');
           }
-
-          // Hacer jugadores y nombres más grandes
-          const players = clonedField.querySelectorAll('.player-btn');
-          players.forEach(player => {
-            player.style.transform = 'translate(-50%, -50%) scale(1.1)';
-            player.style.fontSize = '17px';
-            player.style.minWidth = '90px';
-            player.style.height = '42px';
-          });
-        }
-      }).then(canvas => {
-        const finalCanvas = document.createElement('canvas');
-        finalCanvas.width = 720;
-        finalCanvas.height = 1080;
-        const ctx = finalCanvas.getContext('2d');
-    
-        // Rellenar fondo para asegurarse de que no haya bordes
-        ctx.fillStyle = '#006400';
-        ctx.fillRect(0, 0, 720, 1080);
-    
-        ctx.drawImage(canvas, 0, 0, 720, 1080);
-    
-        finalCanvas.toBlob(blob => {
-          navigator.clipboard.write([
-            new ClipboardItem({ 'image/png': blob })
-          ]).then(() => {
-            console.log('Imagen copiada (720x1080)');
-          }).catch(err => {
-            console.error('Error al copiar:', err);
-            const link = document.createElement('a');
-            link.download = 'formacion-equipos-720x1080.png';
-            link.href = finalCanvas.toDataURL();
-            link.click();
-          });
         }, 'image/png');
       }).catch(err => {
         console.error('Error:', err);
         alert('Error al generar imagen');
       });
     }
-    
 
     function copyFieldText() {
       if (parsedPlayers.length === 0) {
@@ -412,7 +403,7 @@
       const team1List = parsedPlayers.slice(0, half).join('\n');
       const team2List = parsedPlayers.slice(half).join('\n');
     
-      const text = `EQUIPO OSCURO:\n${team1List}\n\nEQUIPO CLARO:\n${team2List}\n\nHora: ${matchHour.toString().padStart(2, '0')}:${matchMinutes}\nCosto: $${matchFee}`;
+      const text = `EQUIPO OSCURO:\n${team1List}\n\nEQUIPO CLARO:\n${team2List}\n\nHora: ${matchHour.toString().padStart(2, '0')}:${matchMinutes.toString().padStart(2, '0')}\nCosto: $${matchFee}`;
     
       navigator.clipboard.writeText(text)
       
