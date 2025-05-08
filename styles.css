@@ -1,569 +1,472 @@
-/* ========================================= */
-/* ========= RESET & GLOBAL STYLES ========= */
-/* ========================================= */
 *, *::before, *::after {
-  box-sizing: border-box; /* Fundamental para el manejo de tamaño */
+box-sizing: border-box;
 }
-
 :root {
-  /* Colores */
-  --primary-color: #2e7d32;       /* Verde principal */
-  --primary-hover: #1b5e20;     /* Verde oscuro para hover */
-  --secondary-color: #006400;    /* Verde del campo */
-  --background-light: #1f1f1f;  /* Fondo general claro */
-  --background-panel: #373737; /* Fondo del panel izquierdo */
-  --card-bg: #f8f8f8;           /* Fondo de secciones internas */
-  --text-color: #ffffff;        /* Texto principal */
-  --text-color-secondary: #ffffff;/* Texto secundario */
-  --border-color: #222222;       /* Borde estándar */
-  --border-color-light: #232323;  /* Borde muy claro */
-  --input-bg: #323232;           /* Fondo de inputs */
-  --input-focus-border: var(--primary-color);
-  --highlight-color: #ff9800;    /* Para selección de jugador */
-  --button-secondary-bg: #00a987; /* Botones secundarios (gris) */
-  --button-secondary-hover: #00b132;
-
-  /* Sombras */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 8px 20px rgba(0, 0, 0, 0.15);
-  --shadow-inset: inset 0 0 10px rgba(0, 0, 0, 0.1);
-
-  /* Tipografía */
-  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+--primary-color: #2e7d32;
+--primary-hover: #1b5e20;
+--secondary-color: #006400;
+--background-light: #1f1f1f;
+--background-panel: #373737;
+--card-bg: #f8f8f8;
+--text-color: #ffffff;
+--text-color-secondary: #ffffff;
+--border-color: #222222;
+--border-color-light: #232323;
+--input-bg: #323232;
+--input-focus-border: var(--primary-color);
+--highlight-color: #ff9800;
+--button-secondary-bg: #00a987;
+--button-secondary-hover: #00b132;
+--shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+--shadow-md: 0 4px 10px rgba(0, 0, 0, 0.08);
+--shadow-lg: 0 8px 20px rgba(0, 0, 0, 0.15);
+--shadow-inset: inset 0 0 10px rgba(0, 0, 0, 0.1);
+--font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-
 body {
-  font-family: var(--font-family);
-  background-color: var(--background-light);
-  margin: 0;
-  padding: 0;
-  color: var(--text-color);
-  line-height: 1.6;
-  height: 100vh; /* Ocupar toda la altura del viewport */
-  width: 100vw;  /* Ocupar todo el ancho del viewport */
-  overflow: hidden; /* Evitar scrollbars en el body */
-  display: flex; /* Necesario para .app-container */
+font-family: var(--font-family);
+background-color: var(--background-light);
+margin: 0;
+padding: 0;
+color: var(--text-color);
+line-height: 1.6;
+height: 100vh;
+width: 100vw;
+overflow: hidden;
+display: flex;
 }
-
-/* ========================================= */
-/* ======== MAIN APP LAYOUT (FLEXBOX) ====== */
-/* ========================================= */
 .app-container {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  background-color: var(--background-light);
-  justify-content: center; /* Centra horizontalmente el contenido hijo (app-container) */
-  align-items: center; /* Centra verticalmente el contenido hijo (app-container) */
+display: flex;
+width: 100%;
+height: 100%;
+background-color: var(--background-light);
+justify-content: center;
+align-items: center;
 }
-
-/* ========================================= */
-/* ========= LEFT COLUMN (CONTROLS) ======== */
-/* ========================================= */
 .left-column {
-  width: 20%; /* Ancho fijo para el panel de controles */
-  flex-shrink: 0; /* Evitar que se encoja */
-  height: 100%; /* Ocupar toda la altura */
-  padding: 25px;
-  background-color: var(--background-panel);
-  border-right: 1px solid var(--border-color);
-  overflow: none; /* Scroll SÓLO para el contenido del panel si excede la altura */
-  display: flex;
-  flex-direction: column;
-  gap: 25px; /* Espacio entre grupos principales (controles y input) */
+width: 20%;
+flex-shrink: 0;
+height: 100%;
+padding: 25px;
+background-color: var(--background-panel);
+border-right: 1px solid var(--border-color);
+overflow: none;
+display: flex;
+flex-direction: column;
+gap: 25px;
 }
-
 label[for="matchHour"], label[for="matchFee"] {
-  text-align: center;
-  font-weight: bold;
-  display: block;
-  width: 100%;
+text-align: center;
+font-weight: bold;
+display: block;
+width: 100%;
 }
-
 .formation-label {
-  text-align: center;
-  width: 100%;
-  font-weight: bold; /* opcional: para destacarlo */
+text-align: center;
+width: 100%;
+font-weight: bold;
 }
-
 .controls-container,
 .player-input-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px; /* Espacio entre controles individuales o label/textarea/button */
+display: flex;
+flex-direction: column;
+gap: 20px;
 }
-
-/* Estilo general para secciones/tarjetas dentro del panel izquierdo */
 .control-card {
-  background-color: var(--card-bg);
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--border-color-light);
+background-color: var(--card-bg);
+padding: 15px;
+border-radius: 8px;
+box-shadow: var(--shadow-sm);
+border: 1px solid var(--border-color-light);
 }
-
-/* Etiquetas */
 label {
-  display: block;
-  font-size: 0.9em;
-  font-weight: 600;
-  color: var(--text-color-secondary);
-  margin-bottom: 8px;
-  padding-left: 2px;
+display: block;
+font-size: 0.9em;
+font-weight: 600;
+color: var(--text-color-secondary);
+margin-bottom: 8px;
+padding-left: 2px;
 }
-
-/* --- Controles específicos --- */
 .time-input-group {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  gap: 10px;
+display: flex;
+justify-content: space-around;
+align-items: center;
+gap: 10px;
 }
 .time-inputs {
-    display: flex;
-    align-items: center;
-    gap: 6px;
+display: flex;
+align-items: center;
+gap: 6px;
 }
 .time-inputs input[type="number"],
 .fee-input-group input[type="number"] {
-  width: 55px;
-  color: white;
-  padding: 8px;
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  font-size: 14px;
-  text-align: center;
-  background-color: var(--input-bg);
-  transition: border-color 0.2s ease;
-  appearance: textfield; /* Ocultar flechas por defecto en algunos navegadores */
-  -moz-appearance: textfield;
+width: 55px;
+color: white;
+padding: 8px;
+border: 1px solid var(--border-color);
+border-radius: 6px;
+font-size: 14px;
+text-align: center;
+background-color: var(--input-bg);
+transition: border-color 0.2s ease;
+appearance: textfield;
+-moz-appearance: textfield;
 }
 .time-inputs input[type="number"]::-webkit-outer-spin-button,
 .time-inputs input[type="number"]::-webkit-inner-spin-button,
 .fee-input-group input[type="number"]::-webkit-outer-spin-button,
 .fee-input-group input[type="number"]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+-webkit-appearance: none;
+margin: 0;
 }
-
 .fee-input-group input[type="number"] {
-    width: 80px; /* Más ancho para el monto */
+width: 80px;
 }
-
 .time-inputs input[type="number"]:focus,
 .fee-input-group input[type="number"]:focus {
-  outline: none;
-  border-color: var(--input-focus-border);
+outline: none;
+border-color: var(--input-focus-border);
 }
-
-/* Botones pequeños (+/-) */
 .time-button,
 .fee-button {
-  background-color: var(--primary-color);
-  border: none;
-  color: white;
-  cursor: pointer;
-  font-size: 16px;
-  padding: 6px 10px;
-  border-radius: 6px;
-  transition: background-color 0.2s ease, transform 0.1s ease;
-  line-height: 1; /* Para alinear mejor el texto */
+background-color: var(--primary-color);
+border: none;
+color: white;
+cursor: pointer;
+font-size: 16px;
+padding: 6px 10px;
+border-radius: 6px;
+transition: background-color 0.2s ease, transform 0.1s ease;
+line-height: 1;
 }
 .time-button:hover,
 .fee-button:hover {
-  background-color: var(--primary-hover);
-  transform: translateY(-1px);
+background-color: var(--primary-hover);
+transform: translateY(-1px);
 }
 .time-button:active,
 .fee-button:active {
-    transform: translateY(0px);
+transform: translateY(0px);
 }
-
 .fee-input-group {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 8px;
 }
-
 .formation-buttons {
-  display: flex;
-  gap: 10px;
-  justify-content: space-between;
+display: flex;
+gap: 10px;
+justify-content: space-between;
 }
 .formation-button {
-  flex: 1;
-  padding: 10px 5px;
-  font-size: 0.9em;
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-align: center;
+flex: 1;
+padding: 10px 5px;
+font-size: 0.9em;
+background-color: var(--primary-color);
+color: white;
+border: none;
+border-radius: 6px;
+cursor: pointer;
+transition: all 0.2s ease;
+text-align: center;
 }
 .formation-button:hover {
-  background-color: var(--primary-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+background-color: var(--primary-hover);
+transform: translateY(-1px);
+box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
-/* Considera añadir una clase .active via JS para marcar la seleccionada */
 .formation-button.active {
-  background-color: var(--primary-hover);
-  font-weight: bold;
-  box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+background-color: var(--primary-hover);
+font-weight: bold;
+box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
 }
-
 .action-buttons {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* Flexible */
-  gap: 10px;
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+gap: 10px;
 }
 .action-button {
-  padding: 10px 5px;
-  font-size: 0.9em;
-  font-weight: 500;
-  background-color: var(--button-secondary-bg);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-align: center;
+padding: 10px 5px;
+font-size: 0.9em;
+font-weight: 500;
+background-color: var(--button-secondary-bg);
+color: white;
+border: none;
+border-radius: 6px;
+cursor: pointer;
+transition: all 0.2s ease;
+text-align: center;
 }
 .action-button:hover {
-  background-color: var(--button-secondary-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+background-color: var(--button-secondary-hover);
+transform: translateY(-1px);
+box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
-/* Botón principal de acción (ej. Compartir) */
 .action-buttons button:first-child {
-    background-color: var(--primary-color);
+background-color: var(--primary-color);
 }
 .action-buttons button:first-child:hover {
-    background-color: var(--primary-hover);
+background-color: var(--primary-hover);
 }
-
-/* Área de texto para jugadores */
-.player-input { /* Textarea */
-  width: 100%;
-  min-height: 150px; /* Más altura */
-  height: auto;
-  padding: 12px;
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  font-size: 14px;
-  background-color: var(--input-bg);
-  color: white;
-  resize: vertical;
-  transition: border-color 0.2s ease;
-  margin-bottom: 10px; /* Espacio antes del botón */
+.player-input {
+width: 100%;
+min-height: 150px;
+height: auto;
+padding: 12px;
+border: 1px solid var(--border-color);
+border-radius: 6px;
+font-size: 14px;
+background-color: var(--input-bg);
+color: white;
+resize: vertical;
+transition: border-color 0.2s ease;
+margin-bottom: 10px;
 }
 .player-input:focus {
-  outline: none;
-  border-color: var(--input-focus-border);
+outline: none;
+border-color: var(--input-focus-border);
 }
 .generate-teams-button {
-  width: 100%;
-  padding: 12px;
-  font-size: 1em;
-  font-weight: 600;
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: var(--shadow-sm);
+width: 100%;
+padding: 12px;
+font-size: 1em;
+font-weight: 600;
+background-color: var(--primary-color);
+color: white;
+border: none;
+border-radius: 6px;
+cursor: pointer;
+transition: all 0.2s ease;
+box-shadow: var(--shadow-sm);
 }
 .generate-teams-button:hover {
-  background-color: var(--primary-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+background-color: var(--primary-hover);
+transform: translateY(-1px);
+box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 }
-
-
-/* ========================================= */
-/* ========= RIGHT AREA (FIELD WRAPPER) ==== */
-/* ========================================= */
-.field-area { /* Este es el contenedor que ocupa el resto del ancho */
-  flex-grow: 1; /* Toma todo el espacio horizontal restante del .app-container (que es flex) */
-  height: 100%; /* Ocupa toda la altura */
-  display: flex; /* *** CLAVE: Habilita Flexbox para este contenedor *** */
-  justify-content: center; /* *** CLAVE: Centra su hijo (.field-container) horizontalmente *** */
-  align-items: center; /* *** CLAVE: Centra su hijo (.field-container) verticalmente *** */
-  background-color: var(--background-light); /* Fondo alrededor del campo */
-  padding: 30px; /* Espacio (margen) alrededor del campo */
-  overflow: hidden; /* Evita que el campo centrado cause scroll si hay errores de tamaño */
+.field-area {
+flex-grow: 1;
+height: 100%;
+display: flex;
+justify-content: center;
+align-items: center;
+background-color: var(--background-light);
+padding: 30px;
+overflow: hidden;
 }
-
-/* ========================================= */
-/* ========= FIELD CONTAINER (THE PITCH) === */
-/* ========================================= */
 .field-container {
-  position: relative; /* Para elementos internos */
-  width: 100%; /* Ocupa el ancho disponible dentro del padding de field-area */
-  height: 100%; /* Ocupa toda la altura */
-  /* La altura se define por aspect-ratio */
-  max-width: 550px; /* Límite de ancho para que no sea gigantesco en pantallas anchas */
-  max-height: 800px;
-  aspect-ratio: 2 / 3; /* Proporción fija (ancho/alto) */
-  background-color: var(--secondary-color); /* Verde campo */
-  border-radius: 10px;
-  box-shadow: var(--shadow-inset), var(--shadow-md);
-  overflow: hidden;
-  /* NOTA: No necesita margin: auto aquí porque el padre (.field-area) lo está centrando con flexbox */
+position: relative;
+width: 100%;
+height: 100%;
+max-width: 550px;
+max-height: 800px;
+aspect-ratio: 2 / 3;
+background-color: var(--secondary-color);
+border-radius: 10px;
+box-shadow: var(--shadow-inset), var(--shadow-md);
+overflow: hidden;
 }
-
-/* --- Elementos DENTRO del campo --- */
-
 .field-line {
-  position: absolute;
-  background-color: rgba(255, 255, 255, 0.8); /* Líneas blancas semi-transparentes */
+position: absolute;
+background-color: rgba(255, 255, 255, 0.8);
 }
-
 .center-line {
-  width: 100%;
-  height: 3px; /* Grosor de línea */
-  top: 50%;
-  left: 0;
-  transform: translateY(-50%);
+width: 100%;
+height: 3px;
+top: 50%;
+left: 0;
+transform: translateY(-50%);
 }
-
 .center-circle {
-  width: 18%; /* Tamaño relativo al ancho del field-container */
-  padding-bottom: 18%; /* Para mantener el círculo redondo */
-  border: 3px solid rgba(255, 255, 255, 0.8);
-  border-radius: 50%;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: transparent; /* Asegurar que no tenga fondo */
+width: 18%;
+padding-bottom: 18%;
+border: 3px solid rgba(255, 255, 255, 0.8);
+border-radius: 50%;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+background-color: transparent;
 }
-
 .goal-area {
-  width: 40%; /* Ancho del área */
-  height: 8%; /* Alto del área */
-  border: 3px solid rgba(255, 255, 255, 0.8);
-  left: 50%;
-  transform: translateX(-50%);
+width: 40%;
+height: 8%;
+border: 3px solid rgba(255, 255, 255, 0.8);
+left: 50%;
+transform: translateX(-50%);
 }
-
 .top-goal {
-  top: 1%; /* Cerca del borde superior */
-  border-top: none; /* Sin borde superior */
+top: 1%;
+border-top: none;
 }
-
 .bottom-goal {
-  bottom: 1%; /* Cerca del borde inferior */
-  border-bottom: none; /* Sin borde inferior */
+bottom: 1%;
+border-bottom: none;
 }
-
 .match-info {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco semi-transparente */
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-size: clamp(15px, 1.5vw, 17px); /* Tamaño de fuente adaptable */
-  font-weight: bold;
-  text-align: center;
-  box-shadow: var(--shadow-md);
-  color: black;
-  white-space: nowrap; /* Evitar que se rompa en dos líneas fácilmente */
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+background-color: rgba(255, 255, 255, 0.9);
+padding: 10px 20px;
+border-radius: 8px;
+font-size: clamp(15px, 1.5vw, 17px);
+font-weight: bold;
+text-align: center;
+box-shadow: var(--shadow-md);
+color: black;
+white-space: nowrap;
 }
-
-/* --- Estilo de los Jugadores --- */
 .player-btn {
-  position: absolute; /* Posicionado relativo a field-container */
-  min-width: 75px;
-  max-width: 100px; /* Limitar ancho máximo */
-  height: 40px; /* Ligeramente más pequeño */
-  width: auto; /* Permitir que el ancho se ajuste al contenido */
-  border-radius: 16px; /* Mitad de la altura */
-  border: 2px solid white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600; /* Negrita más suave */
-  cursor: pointer;
-  transform: translate(-50%, -50%); /* Centrado perfecto */
-  padding: 0 12px;
-  font-size: 14px; /* Más pequeño para caber nombres */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  transition: all 0.2s ease;
-  user-select: none; /* Evitar selección de texto */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra suave */
-  /* Las posiciones left/top se aplican via JS */
+position: absolute;
+min-width: 75px;
+max-width: 100px;
+height: 40px;
+width: auto;
+border-radius: 16px;
+border: 2px solid white;
+display: flex;
+align-items: center;
+justify-content: center;
+font-weight: 600;
+cursor: pointer;
+transform: translate(-50%, -50%);
+padding: 0 12px;
+font-size: 14px;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+transition: all 0.2s ease;
+user-select: none;
+box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
-
 .player-btn.selected {
-  border-color: var(--highlight-color);
-  box-shadow: 0 0 0 3px var(--highlight-color), 0 4px 8px rgba(0, 0, 0, 0.3); /* Resaltado más prominente */
-  transform: translate(-50%, -50%) scale(1.05); /* Ligeramente más grande */
+border-color: var(--highlight-color);
+box-shadow: 0 0 0 3px var(--highlight-color), 0 4px 8px rgba(0, 0, 0, 0.3);
+transform: translate(-50%, -50%) scale(1.05);
 }
-
-.team1-player { /* Equipo oscuro */
-  background-color: #333333;
-  color: white;
-  border-color: #555555;
+.team1-player {
+background-color: #333333;
+color: white;
+border-color: #555555;
 }
-
-.team2-player { /* Equipo claro */
-  background-color: #ffffff;
-  color: #333333;
-  border-color: #cccccc;
+.team2-player {
+background-color: #ffffff;
+color: #333333;
+border-color: #cccccc;
 }
-
-
-/* ========================================= */
-/* ============ RESPONSIVE DESIGN ========== */
-/* ========================================= */
-
-/* Tablets y pantallas medianas */
 @media (max-width: 1024px) {
-  .left-column {
-    width: 300px; /* Reducir ancho del panel */
-    padding: 20px;
-    gap: 20px;
-  }
-  .field-area {
-    padding: 20px; /* Reducir padding alrededor del campo */
-  }
-  .field-container {
-    max-width: 500px; /* Reducir tamaño máximo del campo */
-    max-height: 800px; /* Reducir tamaño máximo del campo */
-  }
-  .time-input-group {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    gap: 2px;
-  }
-  
-  .field-area { /* Este es el contenedor que ocupa el resto del ancho */
-    flex-grow: 1; /* Toma todo el espacio horizontal restante del .app-container (que es flex) */
-    height: 100%; /* Ocupa toda la altura */
-    display: flex; /* *** CLAVE: Habilita Flexbox para este contenedor *** */
-    justify-content: center; /* *** CLAVE: Centra su hijo (.field-container) horizontalmente *** */
-    align-items: center; /* *** CLAVE: Centra su hijo (.field-container) verticalmente *** */
-    background-color: var(--background-light); /* Fondo alrededor del campo */
-    padding: 30px; /* Espacio (margen) alrededor del campo */
-    overflow: hidden; /* Evita que el campo centrado cause scroll si hay errores de tamaño */
-  }
-
-  /* ========================================= */
-  /* ========= FIELD CONTAINER (THE PITCH) === */
-  /* ========================================= */
-  .field-container {
-    position: relative; /* Para elementos internos */
-    width: 100%; /* Ocupa el ancho disponible dentro del padding de field-area */
-    height: 100%; /* Ocupa toda la altura */
-    /* La altura se define por aspect-ratio */
-    max-width: 550px; /* Límite de ancho para que no sea gigantesco en pantallas anchas */
-    max-height: 800px; /*
-    aspect-ratio: 2 / 4; /* Proporción fija (ancho/alto) */
-    background-color: var(--secondary-color); /* Verde campo */
-    border-radius: 10px;
-    box-shadow: var(--shadow-inset), var(--shadow-md);
-    overflow: hidden;
-    /* NOTA: No necesita margin: auto aquí porque el padre (.field-area) lo está centrando con flexbox */
-  }
-  
+.left-column {
+width: 300px;
+padding: 20px;
+gap: 20px;
 }
-
-/* Dispositivos móviles (layout vertical) */
+.field-area {
+padding: 20px;
+}
+.field-container {
+max-width: 500px;
+max-height: 800px;
+}
+.time-input-group {
+display: flex;
+justify-content: space-around;
+align-items: center;
+gap: 2px;
+}
+.field-area {
+flex-grow: 1;
+height: 100%;
+display: flex;
+justify-content: center;
+align-items: center;
+background-color: var(--background-light);
+padding: 30px;
+overflow: hidden;
+}
+.field-container {
+position: relative;
+width: 100%;
+height: 100%;
+max-width: 550px;
+max-height: 800px;
+background-color: var(--secondary-color);
+border-radius: 10px;
+box-shadow: var(--shadow-inset), var(--shadow-md);
+overflow: hidden;
+}
+}
 @media (max-width: 768px) {
-  body {
-    /* Keep existing - overflow: visible is crucial for page scroll */
-    height: auto;
-    min-height: 100vh;
-    overflow: visible; /* <-- Ensures the body can scroll if content overflows */
-  }
-  .app-container {
-    flex-direction: column; /* Stack elements vertically */
-    /* Container grows based on content, minimum 100vh */
-    height: auto; /* <-- Allow height to be dictated by content */
-    min-height: 100vh; /* <-- Ensures it takes at least the viewport height initially, but can grow */
-    /* Remove overflow: hidden if it was present, as we want body to scroll */
-  }
-  .left-column {
-    width: 100%; /* Occupy full width */
-    /* Height determined solely by content */
-    height: auto; /* <-- Allow height to fit content */
-    /* Ensure it does NOT shrink below its content size,
-       GUARANTEEING its content fits */
-    flex-shrink: 0; /* <--- Explicitly prevent shrinking */
-    /* Ensure content does not cause internal scroll */
-    overflow-y: visible; /* <--- No internal scroll in left-column */
-
-    border-right: none; /* Remove right border */
-    border-bottom: 1px solid var(--border-color); /* Add bottom border */
-    padding: 15px; /* Keep padding */
-    gap: 15px; /* Keep gap */
-    /* box-sizing: border-box; /* Good practice, but less critical when height is auto/flex-shrink */
-  }
-
-   .player-btn {
-    min-width: 70px;
-    height: 40px;
-    border-radius: 14px;
-    font-size: 14px;
-  }
-  .time-input-group {
-    display: flex;
-    justify-content: center; /* ⬅ los junta al centro */
-    align-items: center;
-    gap: 10px; /* o menos en móviles */
-  }
-  .match-info {
-     font-size: clamp(15px, 1.5vw, 17px); /* Tamaño de fuente adaptable */
-     font-weight: bold;
-     padding: 8px 15px;
-  }
+body {
+height: auto;
+min-height: 100vh;
+overflow: visible;
 }
-
-/* Ajustes finos para móviles muy pequeños */
+.app-container {
+flex-direction: column;
+height: auto;
+min-height: 100vh;
+}
+.left-column {
+width: 100%;
+height: auto;
+flex-shrink: 0;
+overflow-y: visible;
+border-right: none;
+border-bottom: 1px solid var(--border-color);
+padding: 15px;
+gap: 15px;
+}
+.player-btn {
+min-width: 70px;
+height: 40px;
+border-radius: 14px;
+font-size: 14px;
+}
+.time-input-group {
+display: flex;
+justify-content: center;
+align-items: center;
+gap: 10px;
+}
+.match-info {
+font-size: clamp(15px, 1.5vw, 17px);
+font-weight: bold;
+padding: 8px 15px;
+}
+}
 @media (max-width: 480px) {
-  .left-column {
-    padding: 10px;
-  }
-  .controls-container, .player-input-container { gap: 15px; }
-  .control-card { padding: 12px; }
-  .time-inputs input[type="number"], .fee-input-group input[type="number"] { width: 50px; padding: 6px; }
-  .fee-input-group input[type="number"] { width: 70px; }
-  .time-button, .fee-button { padding: 5px 8px; font-size: 14px; }
-  .formation-button, .action-button { padding: 8px 4px; font-size: 12px; }
-  .player-input { min-height: 100px; padding: 10px; }
-  .generate-teams-button { padding: 10px; font-size: 0.9em; }
-
-  .time-input-group {
-    display: flex;
-    justify-content: center; /* ⬅ los junta al centro */
-    align-items: center;
-    gap: 10px; /* o menos en móviles */
-  }
-
-  .field-area {
-    padding: 10px;
-  }
-  .player-btn {
-    min-width: 70px;
-    height: 40px;
-    border-radius: 13px;
-    font-size: 14px;
-    padding: 0 8px;
-  }
-   .match-info {
-     font-size: clamp(15px, 1.5vw, 17px); /* Tamaño de fuente adaptable */
-     font-weight: bold;
-     padding: 2px 7px;
-   }
-  
+.left-column {
+padding: 10px;
+}
+.controls-container, .player-input-container { gap: 15px; }
+.control-card { padding: 12px; }
+.time-inputs input[type="number"], .fee-input-group input[type="number"] { width: 50px; padding: 6px; }
+.fee-input-group input[type="number"] { width: 70px; }
+.time-button, .fee-button { padding: 5px 8px; font-size: 14px; }
+.formation-button, .action-button { padding: 8px 4px; font-size: 12px; }
+.player-input { min-height: 100px; padding: 10px; }
+.generate-teams-button { padding: 10px; font-size: 0.9em; }
+.time-input-group {
+display: flex;
+justify-content: center;
+align-items: center;
+gap: 10px;
+}
+.field-area {
+padding: 10px;
+}
+.player-btn {
+min-width: 70px;
+height: 40px;
+border-radius: 13px;
+font-size: 14px;
+padding: 0 8px;
+}
+.match-info {
+font-size: clamp(15px, 1.5vw, 17px);
+font-weight: bold;
+padding: 2px 7px;
+}
 }
