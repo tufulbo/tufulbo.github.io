@@ -1,4 +1,3 @@
-    // Variables globales
     let team1 = [];
     let team2 = [];
     let playerElements = { team1: [], team2: [] };
@@ -9,7 +8,6 @@
     let matchMinutes = 0;
     let matchFee = 3500;
 
-    // Inicialización
     function init() {
       var textAreas = document.getElementsByTagName('textarea', 'div');
       Array.prototype.forEach.call(textAreas, function(elem) {
@@ -21,37 +19,37 @@
     function updateHour(change) {
         const hourInput = document.getElementById('matchHour');
         
-        // Si se usa el botón +/-
+        
         if (change !== undefined) {
             matchHour = (matchHour + change + 24) % 24;
             hourInput.value = matchHour;
         } 
-        // Si se edita manualmente
+        
         else {
             const inputValue = parseInt(hourInput.value);
             matchHour = isNaN(inputValue) ? 0 : (inputValue + 24) % 24;
             hourInput.value = matchHour;
         }
         
-        updateMatchInfo(); // Actualiza la visualización
+        updateMatchInfo();
     }
     
     function updateMinutes(change) {
         const minutesInput = document.getElementById('matchMinutes');
         
-        // Si se usa el botón +/-
+        
         if (change !== undefined) {
             matchMinutes = (matchMinutes + change + 60) % 60;
             minutesInput.value = matchMinutes.toString().padStart(2, '0');
         } 
-        // Si se edita manualmente
+        
         else {
             const inputValue = parseInt(minutesInput.value);
             matchMinutes = isNaN(inputValue) ? 0 : (inputValue + 60) % 60;
             minutesInput.value = matchMinutes.toString().padStart(2, '0');
         }
         
-        updateMatchInfo(); // Actualiza la visualización
+        updateMatchInfo(); 
     }
     
     function handleHourChange() {
@@ -73,7 +71,7 @@
     function updateFee(change) {
         const feeInput = document.getElementById('matchFee');
         
-        // Si se usa el botón +/-
+        
         if (change !== undefined) {
             matchFee = Math.max(0, matchFee + change);
             feeInput.value = matchFee;
@@ -85,7 +83,7 @@
             feeInput.value = matchFee; // Actualiza el campo por si hay valores inválidos
         }
         
-        updateMatchInfo(); // Actualiza la visualización en el campo
+        updateMatchInfo();
     }
 
     function setFormation(n) {
@@ -103,17 +101,17 @@
       const rawInput = document.getElementById('playerList').value;
       const lines = rawInput.split('\n');
       
-      // Verificar si hay líneas vacías o emojis
+      
       const hasEmptyLines = lines.some(line => line.trim() === '');
       const hasEmojis = lines.some(line => /[✅❌]/.test(line));
       
       let players = [];
       
       if (!hasEmptyLines && !hasEmojis) {
-        // Si no hay líneas vacías ni emojis, tomar todas las líneas sin filtrar
+        
         players = lines.map(line => line.trim()).filter(line => line !== '');
       } else {
-        // Procesamiento original con filtros
+        
         let skip = false;
         
         lines.forEach((line, index) => {
@@ -163,21 +161,21 @@
     }
 
     function renderPlayers() {
-      // Limpiar jugadores existentes
+      
       const field = document.querySelector('.field-container');
       const existingPlayers = document.querySelectorAll('.player-btn');
       existingPlayers.forEach(player => player.remove());
       
-      // Resetear array de elementos
+     
       playerElements = { team1: [], team2: [] };
     
-      // Posiciones para equipo 1 (arriba)
+     
       const team1Positions = getTeamPositions(true);
       
-      // Posiciones para equipo 2 (abajo)
+      
       const team2Positions = getTeamPositions(false);
     
-      // Crear botones para equipo 1
+     
       team1.forEach((player, index) => {
         if (index < team1Positions.length) {
           const btn = createPlayerButton(player, team1Positions[index], 'team1', index);
@@ -185,7 +183,7 @@
         }
       });
       
-      // Crear botones para equipo 2
+      
       team2.forEach((player, index) => {
         if (index < team2Positions.length) {
           const btn = createPlayerButton(player, team2Positions[index], 'team2', index);
@@ -193,31 +191,31 @@
         }
       });
       
-      // Actualizar selección si hay un jugador seleccionado
+      
       updatePlayerSelection();
     }
 
     function getTeamPositions(isTopTeam) {
-      // Posiciones base (porcentajes para mejor adaptación)
+      
       const positions = [
-        // Portero (x, y)
+        
         [50, isTopTeam ? 5 : 95],
-        // Defensas
+        
         [20, isTopTeam ? 20 : 80],
         [50, isTopTeam ? 20 : 80],
         [80, isTopTeam ? 20 : 80],
-        // Medios
+        
         [15, isTopTeam ? 35 : 65],
         [85, isTopTeam ? 35 : 65],
-        // Medio centro
+       
         [50, isTopTeam ? 40 : 60]
       ];
     
-      // Ajustar para formaciones
+     
       if (currentFormation === 6) {
-        return positions.filter((_, i) => i !== 6); // Quitar medio centro
+        return positions.filter((_, i) => i !== 6); 
       } else if (currentFormation === 5) {
-        return positions.filter((_, i) => ![4, 5].includes(i)); // Solo porteros y defensas
+        return positions.filter((_, i) => ![4, 5].includes(i));
       }
       
       return positions;
@@ -227,7 +225,7 @@
       const btn = document.createElement('button');
       btn.className = `player-btn ${team}-player`;
       
-      // Aplicar posiciones directamente como estilo
+      
       btn.style.left = `${position[0]}%`;
       btn.style.top = `${position[1]}%`;
       
@@ -235,7 +233,7 @@
       btn.dataset.team = team;
       btn.dataset.index = index;
       
-      // Eventos (mantener los mismos)
+    
       btn.onclick = function(e) {
         e.stopPropagation();
         handlePlayerClick(team, index);
@@ -253,17 +251,17 @@
 
     function handlePlayerClick(team, index) {
       if (!selectedPlayer) {
-        // Seleccionar primer jugador
+     
         selectedPlayer = { team, index };
         updatePlayerSelection();
       } else {
-        // Intercambiar jugadores
+        
         if (selectedPlayer.team === team) {
-          // Mismo equipo - intercambiar posiciones
+          
           const teamArray = team === 'team1' ? team1 : team2;
           [teamArray[selectedPlayer.index], teamArray[index]] = [teamArray[index], teamArray[selectedPlayer.index]];
         } else {
-          // Equipos diferentes - intercambiar jugadores
+       
           const team1Array = selectedPlayer.team === 'team1' ? team1 : team2;
           const team2Array = team === 'team2' ? team2 : team1;
           const index1 = selectedPlayer.index;
@@ -271,7 +269,7 @@
           [team1Array[index1], team2Array[index2]] = [team2Array[index2], team1Array[index1]];
         }
         
-        // Actualizar lista de jugadores
+       
         parsedPlayers = [...team1, ...team2];
         document.getElementById('playerList').value = parsedPlayers.join('\n');
         
@@ -281,12 +279,12 @@
     }
 
     function updatePlayerSelection() {
-      // Remover selección de todos los jugadores
+      
       document.querySelectorAll('.player-btn').forEach(btn => {
         btn.classList.remove('selected');
       });
       
-      // Aplicar selección al jugador actual
+     
       if (selectedPlayer) {
         const teamArray = playerElements[selectedPlayer.team];
         if (teamArray && teamArray[selectedPlayer.index]) {
@@ -409,7 +407,7 @@
       
         .catch(err => {
           console.error('Error al copiar texto:', err);
-          // Alternativa para navegadores antiguos
+         
           const textarea = document.createElement('textarea');
           textarea.value = text;
           document.body.appendChild(textarea);
@@ -419,5 +417,5 @@
         });
     }
 
-    // Inicializar al cargar
+ 
     window.onload = init;
