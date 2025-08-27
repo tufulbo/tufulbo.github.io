@@ -11,9 +11,73 @@
     function init() {
       var textAreas = document.getElementsByTagName('textarea', 'div');
       Array.prototype.forEach.call(textAreas, function(elem) {
-          elem.placeholder = elem.placeholder.replace(/\\n/g, '\n');
+          elem.placeholder = elem.placeholder.replace(/\n/g, '\n');
       });
+      // Restaurar formación desde la URL si existe
+      restoreFormationFromURL();
       updateMatchInfo();
+  // Ya no es necesario crear el botón aquí, se encuentra en el HTML
+    }
+    // Serializa la formación y la información relevante en la URL
+    function getFormationURL() {
+      const data = {
+        team1,
+        team2,
+        formation: currentFormation,
+        hour: matchHour,
+        minutes: matchMinutes,
+        fee: matchFee
+      };
+      const params = new URLSearchParams();
+      params.set('formation', btoa(encodeURIComponent(JSON.stringify(data))));
+      return window.location.origin + window.location.pathname + '?' + params.toString();
+    }
+
+    // Copia el link al portapapeles
+    function shareFormationLink() {
+      const url = getFormationURL();
+      navigator.clipboard.writeText(url).then(() => {
+        alert('¡Link copiado al portapapeles!');
+      }).catch(() => {
+        fallbackShare('Copia este link: ' + url);
+      });
+    }
+
+    // Restaura la formación desde la URL si existe
+    function restoreFormationFromURL() {
+      const params = new URLSearchParams(window.location.search);
+      const encoded = params.get('formation');
+      if (encoded) {
+        try {
+          const decoded = decodeURIComponent(atob(encoded));
+          const data = JSON.parse(decoded);
+          if (data.team1 && data.team2) {
+            team1 = data.team1;
+            team2 = data.team2;
+            parsedPlayers = [...team1, ...team2];
+            currentFormation = data.formation || 7;
+            matchHour = data.hour || 23;
+            matchMinutes = data.minutes || 0;
+            matchFee = data.fee || 3500;
+            // Actualizar campos visuales si existen
+            if (document.getElementById('playerList')) {
+              document.getElementById('playerList').value = parsedPlayers.join('\n');
+            }
+            if (document.getElementById('matchHour')) {
+              document.getElementById('matchHour').value = matchHour;
+            }
+            if (document.getElementById('matchMinutes')) {
+              document.getElementById('matchMinutes').value = matchMinutes.toString().padStart(2, '0');
+            }
+            if (document.getElementById('matchFee')) {
+              document.getElementById('matchFee').value = matchFee;
+            }
+            renderPlayers();
+          }
+        } catch (e) {
+          // Si hay error, ignorar y no restaurar
+        }
+      }
     }
 
     function updateHour(change) {
