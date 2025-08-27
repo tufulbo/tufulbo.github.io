@@ -16,7 +16,7 @@
       // Restaurar formación desde la URL si existe
       restoreFormationFromURL();
       updateMatchInfo();
-  // Ya no es necesario crear el botón aquí, se encuentra en el HTML
+
     }
     // Serializa la formación y la información relevante en la URL de forma compacta
     function getFormationURL() {
@@ -115,7 +115,6 @@
             matchMinutes = isNaN(inputValue) ? 0 : (inputValue + 60) % 60;
             minutesInput.value = matchMinutes.toString().padStart(2, '0');
         }
-        
         updateMatchInfo(); 
     }
     
@@ -291,72 +290,93 @@
     function createPlayerButton(name, position, team, index) {
       const btn = document.createElement('button');
       btn.className = `player-btn ${team}-player`;
-      
-      
       btn.style.left = `${position[0]}%`;
       btn.style.top = `${position[1]}%`;
-      
-      btn.textContent = name;
       btn.dataset.team = team;
       btn.dataset.index = index;
-      
-    
+
+      // Crear un contenedor para la camiseta y el nombre
+      btn.innerHTML = `
+        <span class="player-shirt-bg"></span>
+        <span class="player-name">${name}</span>
+      `;
+
       btn.onclick = function(e) {
         e.stopPropagation();
         handlePlayerClick(team, index);
       };
-      
       btn.ontouchstart = function(e) {
         e.stopPropagation();
         handlePlayerClick(team, index);
         e.preventDefault();
       };
-      
       document.querySelector('.field-container').appendChild(btn);
       return btn;
     }
 
+    // Para resaltar ambos jugadores intercambiados
+    let lastSwapped = null;
     function handlePlayerClick(team, index) {
       if (!selectedPlayer) {
-     
         selectedPlayer = { team, index };
         updatePlayerSelection();
       } else {
-        
+        let swapped = null;
         if (selectedPlayer.team === team) {
-          
           const teamArray = team === 'team1' ? team1 : team2;
           [teamArray[selectedPlayer.index], teamArray[index]] = [teamArray[index], teamArray[selectedPlayer.index]];
+          swapped = [
+            { team, index: selectedPlayer.index },
+            { team, index }
+          ];
         } else {
-       
           const team1Array = selectedPlayer.team === 'team1' ? team1 : team2;
           const team2Array = team === 'team2' ? team2 : team1;
           const index1 = selectedPlayer.index;
           const index2 = index;
           [team1Array[index1], team2Array[index2]] = [team2Array[index2], team1Array[index1]];
+          swapped = [
+            { team: selectedPlayer.team, index: index1 },
+            { team, index: index2 }
+          ];
         }
-        
-       
         parsedPlayers = [...team1, ...team2];
         document.getElementById('playerList').value = parsedPlayers.join('\n');
-        
         selectedPlayer = null;
+        lastSwapped = swapped;
         renderPlayers();
+        // Quitar el resaltado después de 500ms
+        setTimeout(() => {
+          lastSwapped = null;
+          updatePlayerSelection();
+        }, 250);
       }
     }
 
     function updatePlayerSelection() {
-      
       document.querySelectorAll('.player-btn').forEach(btn => {
         btn.classList.remove('selected');
+        const nameSpan = btn.querySelector('.player-name');
+        if (nameSpan) nameSpan.classList.remove('selected');
       });
-      
-     
+      // Si hay selección activa
       if (selectedPlayer) {
         const teamArray = playerElements[selectedPlayer.team];
         if (teamArray && teamArray[selectedPlayer.index]) {
-          teamArray[selectedPlayer.index].classList.add('selected');
+          // Resalta solo el nombre
+          const nameSpan = teamArray[selectedPlayer.index].querySelector('.player-name');
+          if (nameSpan) nameSpan.classList.add('selected');
         }
+      }
+      // Si hay último swap, resaltar ambos nombres
+      if (lastSwapped && Array.isArray(lastSwapped)) {
+        lastSwapped.forEach(sel => {
+          const arr = playerElements[sel.team];
+          if (arr && arr[sel.index]) {
+            const nameSpan = arr[sel.index].querySelector('.player-name');
+            if (nameSpan) nameSpan.classList.add('selected');
+          }
+        });
       }
     }
 
