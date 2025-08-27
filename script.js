@@ -18,18 +18,20 @@
       updateMatchInfo();
   // Ya no es necesario crear el botón aquí, se encuentra en el HTML
     }
-    // Serializa la formación y la información relevante en la URL
+    // Serializa la formación y la información relevante en la URL de forma compacta
     function getFormationURL() {
-      const data = {
-        team1,
-        team2,
-        formation: currentFormation,
-        hour: matchHour,
-        minutes: matchMinutes,
-        fee: matchFee
-      };
+      // Compactar: jugadores separados por |, equipos por coma, luego formación,hora,minutos,costo
+      const t1 = team1.map(j => j.replace(/\|/g, ' ')).join('|');
+      const t2 = team2.map(j => j.replace(/\|/g, ' ')).join('|');
+      const arr = [t1, t2, currentFormation, matchHour, matchMinutes, matchFee];
+      // Unir y codificar en base64url
+      let compact = arr.join(',');
+      let b64 = btoa(unescape(encodeURIComponent(compact)))
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=+$/, '');
       const params = new URLSearchParams();
-      params.set('formation', btoa(encodeURIComponent(JSON.stringify(data))));
+      params.set('formation', b64);
       return window.location.origin + window.location.pathname + '?' + params.toString();
     }
 
@@ -43,37 +45,38 @@
       });
     }
 
-    // Restaura la formación desde la URL si existe
+    // Restaura la formación desde la URL si existe (versión compacta)
     function restoreFormationFromURL() {
       const params = new URLSearchParams(window.location.search);
       const encoded = params.get('formation');
       if (encoded) {
         try {
-          const decoded = decodeURIComponent(atob(encoded));
-          const data = JSON.parse(decoded);
-          if (data.team1 && data.team2) {
-            team1 = data.team1;
-            team2 = data.team2;
-            parsedPlayers = [...team1, ...team2];
-            currentFormation = data.formation || 7;
-            matchHour = data.hour || 23;
-            matchMinutes = data.minutes || 0;
-            matchFee = data.fee || 3500;
-            // Actualizar campos visuales si existen
-            if (document.getElementById('playerList')) {
-              document.getElementById('playerList').value = parsedPlayers.join('\n');
-            }
-            if (document.getElementById('matchHour')) {
-              document.getElementById('matchHour').value = matchHour;
-            }
-            if (document.getElementById('matchMinutes')) {
-              document.getElementById('matchMinutes').value = matchMinutes.toString().padStart(2, '0');
-            }
-            if (document.getElementById('matchFee')) {
-              document.getElementById('matchFee').value = matchFee;
-            }
-            renderPlayers();
+          // base64url -> base64
+          let b64 = encoded.replace(/-/g, '+').replace(/_/g, '/');
+          while (b64.length % 4) b64 += '=';
+          const compact = decodeURIComponent(escape(atob(b64)));
+          const [t1, t2, f, h, m, c] = compact.split(',');
+          team1 = t1 ? t1.split('|').map(j => j.trim()) : [];
+          team2 = t2 ? t2.split('|').map(j => j.trim()) : [];
+          parsedPlayers = [...team1, ...team2];
+          currentFormation = parseInt(f) || 7;
+          matchHour = parseInt(h) || 23;
+          matchMinutes = parseInt(m) || 0;
+          matchFee = parseInt(c) || 3500;
+          // Actualizar campos visuales si existen
+          if (document.getElementById('playerList')) {
+            document.getElementById('playerList').value = parsedPlayers.join('\n');
           }
+          if (document.getElementById('matchHour')) {
+            document.getElementById('matchHour').value = matchHour;
+          }
+          if (document.getElementById('matchMinutes')) {
+            document.getElementById('matchMinutes').value = matchMinutes.toString().padStart(2, '0');
+          }
+          if (document.getElementById('matchFee')) {
+            document.getElementById('matchFee').value = matchFee;
+          }
+          renderPlayers();
         } catch (e) {
           // Si hay error, ignorar y no restaurar
         }
