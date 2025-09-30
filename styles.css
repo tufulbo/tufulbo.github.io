@@ -345,8 +345,8 @@ white-space: nowrap;
 	position: absolute;
 	left: 50%;
 	top: 50%;
-	width: 75px;
-	height: 75px;
+	width: 95px;
+	height: 85px;
 	transform: translate(-50%, -50%);
 	z-index: 0;
 	background-size: contain;
@@ -357,32 +357,39 @@ white-space: nowrap;
 .player-btn .player-name {
     position: relative;
     z-index: 1;
-    display: block;
-    width: 80px;
+    display: inline-block;
+    width: auto;
+    max-width: 80px;
     text-align: center;
     font-size: 13px;
     font-weight: 700;
     color: #222;
     text-shadow: 0 1px 2px #fff, 0 0 2px #fff;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    overflow: visible;
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.1;
     margin: 0 auto;
     text-transform: uppercase;
 }
 .team1-player .player-shirt-bg {
-	background-image: url('blackteam.png');
+	background-image: url('blackteam.svg');
 }
 .team2-player .player-shirt-bg {
-	background-image: url('whiteteam.png');
+	background-image: url('whiteteam.svg');
 }
 .team1-player .player-name {
 	color: #fff !important;
 	text-shadow: 0 1px 2px #000, 0 0 2px #000;
 }
 .team2-player .player-name {
-	color: #222 !important;
-    text-shadow: 0 2px 6px #fff, 0 0 12px #fff, 0 0 8px #fff, 0 0 16px #fff;
+	color: #fff !important;
+	text-shadow: 
+		-1px -1px 0 #000,
+		1px -1px 0 #000,
+		-1px 1px 0 #000,
+		1px 1px 0 #000,
+		0 1px 2px #000;
 }
 .player-btn.selected {
 	/* Sin borde ni highlight, solo animación de escala si se desea */
