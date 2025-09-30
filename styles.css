@@ -34,6 +34,12 @@ height: 100vh;
 width: 100vw;
 overflow: hidden;
 display: flex;
+color-scheme: light dark;
+}
+
+/* Forzar esquema de color normal para elementos de jugadores */
+.player-btn, .player-btn *, .field-container {
+	color-scheme: normal !important;
 }
 .app-container {
 display: flex;
@@ -55,7 +61,7 @@ display: flex;
 flex-direction: column;
 gap: 25px;
 }
-label[for="matchHour"], label[for="matchFee"] {
+label[for="matchHour"], label[for="matchFee"], label[for="toggleInfo"] {
 text-align: center;
 font-weight: bold;
 display: block;
@@ -374,9 +380,13 @@ white-space: nowrap;
 }
 .team1-player .player-shirt-bg {
 	background-image: url('blackteam.svg') !important;
+	color-scheme: normal !important;
+	filter: none !important;
 }
 .team2-player .player-shirt-bg {
 	background-image: url('whiteteam.svg') !important;
+	color-scheme: normal !important;
+	filter: none !important;
 }
 .team1-player .player-name {
 	color: #fff !important;
