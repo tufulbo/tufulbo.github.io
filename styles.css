@@ -373,10 +373,10 @@ white-space: nowrap;
     text-transform: uppercase;
 }
 .team1-player .player-shirt-bg {
-	background-image: url('blackteam.svg');
+	background-image: url('blackteam.svg') !important;
 }
 .team2-player .player-shirt-bg {
-	background-image: url('whiteteam.svg');
+	background-image: url('whiteteam.svg') !important;
 }
 .team1-player .player-name {
 	color: #fff !important;
