@@ -34,13 +34,25 @@ height: 100vh;
 width: 100vw;
 overflow: hidden;
 display: flex;
-color-scheme: light dark;
 }
 
 /* Forzar esquema de color normal para elementos de jugadores */
 .player-btn, .player-btn *, .field-container {
-	color-scheme: normal !important;
+	forced-color-adjust: none !important;
+	print-color-adjust: exact !important;
+	-webkit-filter: none !important;
+	filter: none !important;
 }
+
+/* Prevenir cambios de color del navegador en SVG */
+.player-btn .player-shirt-bg, 
+.player-btn .player-shirt-bg *,
+.team1-player .player-shirt-bg,
+.team2-player .player-shirt-bg {
+	forced-color-adjust: none !important;
+	print-color-adjust: exact !important;
+}
+
 .app-container {
 display: flex;
 width: 100%;
@@ -314,14 +326,14 @@ position: absolute;
 top: 50%;
 left: 50%;
 transform: translate(-50%, -50%);
-background-color: rgba(255, 255, 255, 0.9);
-padding: 10px 20px;
+background-color: rgb(0, 0, 0);
+padding: 10px 10px;
 border-radius: 8px;
 font-size: clamp(15px, 1.5vw, 17px);
 font-weight: bold;
 text-align: center;
 box-shadow: var(--shadow-md);
-color: black;
+color: rgb(255, 255, 255);
 white-space: nowrap;
 }
 /* Player button with shirt background */
@@ -374,28 +386,33 @@ white-space: nowrap;
     overflow: visible;
     white-space: normal;
     word-break: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
     line-height: 1.1;
     margin: 0 auto;
     text-transform: uppercase;
 }
-.team1-player .player-shirt-bg {
-	background-image: url('blackteam.svg') !important;
-	color-scheme: normal !important;
-	filter: none !important;
-	fill: black !important;
-}
-.team2-player .player-shirt-bg {
-	background-image: url('whiteteam.svg') !important;
-	color-scheme: normal !important;
-	filter: none !important;
-	fill: white !important;
-}
 .team1-player .player-name {
 	color: #fff !important;
 	text-shadow: 0 1px 2px #000, 0 0 2px #000;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
 }
 .team2-player .player-name {
 	color: #fff !important;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
 	text-shadow: 
 		-1px -1px 0 #000,
 		1px -1px 0 #000,
@@ -486,6 +503,14 @@ white-space: nowrap;
     font-size: 14px;
     border: none !important;
     }
+    .player-btn .player-name {
+        word-break: break-word !important;
+        overflow-wrap: break-word !important;
+        hyphens: auto !important;
+        -webkit-hyphens: auto !important;
+        white-space: normal !important;
+        max-width: 65px !important;
+    }
     .time-input-group {
     display: flex;
     justify-content: center;
@@ -495,7 +520,7 @@ white-space: nowrap;
     .match-info {
     font-size: clamp(15px, 1.5vw, 17px);
     font-weight: bold;
-    padding: 8px 15px;
+    padding: 5px 5px;
     }
     }
     @media (max-width: 480px) {
@@ -525,6 +550,15 @@ white-space: nowrap;
     border-radius: 13px;
     font-size: 14px;
     padding: 0 8px;
+    }
+    .player-btn .player-name {
+        word-break: break-word !important;
+        overflow-wrap: break-word !important;
+        hyphens: auto !important;
+        -webkit-hyphens: auto !important;
+        white-space: normal !important;
+        max-width: 60px !important;
+        line-height: 1.0 !important;
     }
     .match-info {
     font-size: clamp(15px, 1.5vw, 17px);
