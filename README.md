@@ -2,7 +2,7 @@
 # ⚽ Soccer Lineup Maker (Organizador de Formaciones)
 
 Una aplicación web para crear y compartir alineaciones de partidos de fútbol, con un campo interactivo y controles sencillos.  
-**Desplegada en:** [https://juancruzdal.github.io](https://juancruzdal.github.io)
+**Desplegada en:** [https://tufulbo.github.io](https://tufulbo.github.io)
 
 
 ![image](https://github.com/user-attachments/assets/955c46aa-2f35-4e57-b6b0-a1fd657a1b3b)
@@ -35,7 +35,7 @@ Una aplicación web para crear y compartir alineaciones de partidos de fútbol, 
 
 ### En GitHub Pages
 
-1. Visita: [https://juancruzdal.github.io](https://juancruzdal.github.io)  
+1. Visita: [https://tufulbo.github.io](https://tufulbo.github.io)  
 2. Los cambios en la rama `main` se reflejan en 1 a 10 minutos.
 
 ### Localmente
