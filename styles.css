@@ -382,11 +382,13 @@ white-space: nowrap;
 	background-image: url('blackteam.svg') !important;
 	color-scheme: normal !important;
 	filter: none !important;
+	fill: black !important;
 }
 .team2-player .player-shirt-bg {
 	background-image: url('whiteteam.svg') !important;
 	color-scheme: normal !important;
 	filter: none !important;
+	fill: white !important;
 }
 .team1-player .player-name {
 	color: #fff !important;
