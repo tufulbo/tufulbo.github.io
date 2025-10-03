@@ -36,7 +36,46 @@
     }
 
     // Copia el link al portapapeles
-    function shareFormationLink() {
+    async function shareFormationLink() {
+      try {
+        // Mostrar indicador de carga
+        const originalAlert = alert;
+        alert = () => {}; // Temporalmente deshabilitar alerts
+        
+        // Preparar datos para Supabase
+        const formationData = {
+          team1: team1,
+          team2: team2,
+          formation: currentFormation,
+          hour: matchHour,
+          minutes: matchMinutes,
+          fee: matchFee
+        };
+
+        // Guardar en Supabase
+        const result = await saveFormationToSupabase(formationData);
+        
+        if (result.success) {
+          // Crear URL con ID corto
+          const url = `${window.location.origin}${window.location.pathname}?id=${result.shortId}`;
+          
+          // Copiar al portapapeles
+          await navigator.clipboard.writeText(url);
+          alert = originalAlert; // Restaurar alert
+          alert(`¡Link copiado al portapapeles! 🚀\n\nID: #${result.shortId}`);
+        } else {
+          throw new Error('Error al guardar la formación');
+        }
+      } catch (error) {
+        console.error('Error al compartir:', error);
+        alert('Error al guardar la formación. Usando método tradicional...');
+        // Fallback al método original
+        shareFormationLinkFallback();
+      }
+    }
+
+    // Función fallback para compatibilidad
+    function shareFormationLinkFallback() {
       const url = getFormationURL();
       navigator.clipboard.writeText(url).then(() => {
         alert('¡Link copiado al portapapeles!');
@@ -45,9 +84,40 @@
       });
     }
 
-    // Restaura la formación desde la URL si existe (versión compacta)
-    function restoreFormationFromURL() {
+    // Restaura la formación desde la URL si existe (compatible con IDs enteros y base64)
+    async function restoreFormationFromURL() {
       const params = new URLSearchParams(window.location.search);
+      
+      // Priorizar ID entero de Supabase
+      const shortIdParam = params.get('id');
+      if (shortIdParam) {
+        // Validar que sea un número
+        const shortId = parseInt(shortIdParam);
+        if (!isNaN(shortId) && shortId > 0) {
+          try {
+            const result = await loadFormationFromSupabase(shortId);
+            if (result.success && result.data) {
+              const data = result.data;
+              team1 = data.team1 || [];
+              team2 = data.team2 || [];
+              parsedPlayers = [...team1, ...team2];
+              currentFormation = data.formation || 7;
+              matchHour = data.hour || 23;
+              matchMinutes = data.minutes || 0;
+              matchFee = data.fee || 3500;
+              
+              updateFormFields();
+              renderPlayers();
+              return; // Éxito, no continuar con base64
+            }
+          } catch (error) {
+            console.error('Error cargando formación desde Supabase:', error);
+            // Continuar con el método base64 como fallback
+          }
+        }
+      }
+      
+      // Fallback: método base64 existente
       const encoded = params.get('formation');
       if (encoded) {
         try {
@@ -63,23 +133,29 @@
           matchHour = parseInt(h) || 23;
           matchMinutes = parseInt(m) || 0;
           matchFee = parseInt(c) || 3500;
-          // Actualizar campos visuales si existen
-          if (document.getElementById('playerList')) {
-            document.getElementById('playerList').value = parsedPlayers.join('\n');
-          }
-          if (document.getElementById('matchHour')) {
-            document.getElementById('matchHour').value = matchHour;
-          }
-          if (document.getElementById('matchMinutes')) {
-            document.getElementById('matchMinutes').value = matchMinutes.toString().padStart(2, '0');
-          }
-          if (document.getElementById('matchFee')) {
-            document.getElementById('matchFee').value = matchFee;
-          }
+          
+          updateFormFields();
           renderPlayers();
         } catch (e) {
           // Si hay error, ignorar y no restaurar
+          console.error('Error restaurando desde base64:', e);
         }
+      }
+    }
+
+    // Función auxiliar para actualizar campos del formulario
+    function updateFormFields() {
+      if (document.getElementById('playerList')) {
+        document.getElementById('playerList').value = parsedPlayers.join('\n');
+      }
+      if (document.getElementById('matchHour')) {
+        document.getElementById('matchHour').value = matchHour;
+      }
+      if (document.getElementById('matchMinutes')) {
+        document.getElementById('matchMinutes').value = matchMinutes.toString().padStart(2, '0');
+      }
+      if (document.getElementById('matchFee')) {
+        document.getElementById('matchFee').value = matchFee;
       }
     }
 
